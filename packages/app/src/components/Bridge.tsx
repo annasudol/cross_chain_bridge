@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAccount, useBalance, useEstimateGas, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi'
 import { useState, useEffect } from 'react'
@@ -8,10 +9,11 @@ import { AddressInput } from '@/components/AddressInput'
 import { TokenBalance } from '@/components/TokenBalance'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { formatBalance } from '@/utils/formatBalance'
+import { TokenInfo } from '@/components/TokenInfo'
 
 type Address = `0x${string}` | undefined
 
-export default function SendEther() {
+export default function Bridge() {
   const [to, setTo] = useState<Address>(undefined)
   const [isValidToAddress, setIsValidToAddress] = useState<boolean>(false)
   const [amount, setAmount] = useState('0.01')
@@ -22,7 +24,7 @@ export default function SendEther() {
   const balance = useBalance({
     address,
   })
-
+console.log(chain, 'chain')
   const { data: estimateData, error: estimateError } = useEstimateGas({
     to: isValidToAddress ? (to as Address) : undefined,
     value: parseEther(amount),
@@ -70,12 +72,13 @@ export default function SendEther() {
         type: 'error',
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txSuccess, txError])
 
   return (
     <div className='flex-column align-center '>
       <h1 className='text-xl'>Send Ether</h1>
-      <div className='flex align-end grid md:grid-cols-1 lg:grid-cols-2 gap-4 '>
+      <div className='flex align-end md:grid-cols-1 lg:grid-cols-2 gap-4 '>
         <div className='flex-col m-2 '>
           <label className='form-control w-full max-w-xs'>
             <div className='label py-2'>
@@ -110,10 +113,11 @@ export default function SendEther() {
               </div>
               <div className='stat-title '>Your balance</div>
               {address ? <TokenBalance address={address} /> : <p>Please connect your wallet</p>}
+              <TokenInfo chainId={chain?.id} />
             </div>
           </div>
           <button
-            className='btn btn-wide w-[100%] '
+            className='btn w-[100%] '
             onClick={handleSendTransation}
             disabled={!isValidToAddress || !address || Boolean(estimateError) || amount === ''}>
             {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Send ethers'}
