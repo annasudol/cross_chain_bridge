@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAccount } from 'wagmi'
-
+import Image from 'next/image'
 import Ethereum from '@/assets/icons/ethereum.png'
 import { TokenBalance } from '@/components/TokenBalance'
 
@@ -14,7 +13,7 @@ export function AccountInfo() {
     <div className='stats shadow join-item mb-2 bg-gray-900'>
       <div className='stat'>
         <div className='stat-figure text-secondary'>
-          <img width={50} className='opacity-50 ml-10' src={Ethereum.src} alt='ethereum' />
+          <Image width={50} className='opacity-50 ml-10' src={Ethereum.src} alt='ethereum' />
         </div>
         <div className='stat-title '>Your balance</div>
         {address ? <TokenBalance address={address} /> : <p>Please connect your wallet</p>}

@@ -1,10 +1,9 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import Image from 'next/image'
+import { ChainIcon } from '@/components/ChainIcon'
 export const SwitchNetworkBtn = () => {
   return (
     <ConnectButton.Custom>
       {function ({ account, chain, openChainModal, authenticationStatus, mounted }) {
-        console.log(chain, 'chain')
         const ready = mounted && authenticationStatus !== 'loading'
         const connected =
           ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated')
@@ -22,7 +21,7 @@ export const SwitchNetworkBtn = () => {
             {((): any => {
               if (connected) {
                 return (
-                  <div className='mb-4 ml-4 flex max-w-max items-center justify-start'>
+                  <div className='mb-4 ml-1 flex max-w-max items-center justify-start'>
                     <span className='mr-1 text-lg text-white '>From</span>
                     <button
                       onClick={openChainModal}
@@ -40,9 +39,7 @@ export const SwitchNetworkBtn = () => {
                             overflow: 'hidden',
                             marginRight: 4,
                           }}>
-                          {chain?.iconUrl && (
-                            <Image alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} width={20} height={20} />
-                          )}
+                          {chain?.iconUrl && <ChainIcon name={chain.name} iconUrl={chain.iconUrl} />}
                         </div>
                       )}
                       {chain?.name}

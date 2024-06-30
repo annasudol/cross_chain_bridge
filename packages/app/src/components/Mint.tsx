@@ -1,19 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAccount, useBalance, useEstimateGas, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi'
 import { useState, useEffect } from 'react'
-import { parseEther, isAddress } from 'viem'
 import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { formatBalance } from '@/utils/formatBalance'
-import { TokenInfo } from '@/components/TokenInfo'
 import { SwitchNetworkBtn } from './SwitchNetworkBtn'
-
-type Address = `0x${string}` | undefined
+import { TokenName } from './TokenName'
 
 export function Mint() {
-  const [to, setTo] = useState<Address>(undefined)
-  const [isValidToAddress, setIsValidToAddress] = useState<boolean>(false)
   const [amount, setAmount] = useState('0.01')
 
   const { Add } = useNotifications()
@@ -22,10 +16,10 @@ export function Mint() {
   const balance = useBalance({
     address,
   })
-  const { data: estimateData, error: estimateError } = useEstimateGas({
-    to: isValidToAddress ? (to as Address) : undefined,
-    value: parseEther(amount),
-  })
+  //   const { data: estimateData, error: estimateError } = useEstimateGas({
+  //     to: isValidToAddress ? (to as Address) : undefined,
+  //     value: parseEther(amount),
+  //   })
 
   const { data, sendTransaction } = useSendTransaction()
 
@@ -38,25 +32,23 @@ export function Mint() {
   })
 
   const handleSendTransaction = () => {
-    if (estimateError) {
-      Add(`Transaction failed: ${estimateError.cause}`, {
-        type: 'error',
-      })
-      return
-    }
-    sendTransaction({
-      gas: estimateData,
-      value: parseEther(amount),
-      to: (to as Address)!,
-    })
+    // if (estimateError) {
+    //   Add(`Transaction failed: ${estimateError.cause}`, {
+    //     type: 'error',
+    //   })
+    //   return
+    // }
+    // sendTransaction({
+    //   gas: estimateData,
+    //   value: parseEther(amount),
+    //   to: (to as Address)!,
+    // })
   }
-
-  const handleToAdressInput = (to: string) => {
-    if (to.startsWith('0x')) setTo(to as `0x${string}`)
-    else setTo(`0x${to}`)
-    setIsValidToAddress(isAddress(to))
-  }
-
+  //   const handleToAdressInput = (to: string) => {
+  //     if (to.startsWith('0x')) setTo(to as `0x${string}`)
+  //     else setTo(`0x${to}`)
+  //     setIsValidToAddress(isAddress(to))
+  //   }
   useEffect(() => {
     if (txSuccess) {
       Add(`Transaction successful`, {
@@ -71,27 +63,23 @@ export function Mint() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txSuccess, txError])
-
+  console.log(chain, 'chain1')
   return (
-    <div className='flex-column align-center p-4'>
+    <div className='flex-column align-center p-8'>
       <SwitchNetworkBtn />
       <div className='flex flex-col-reverse align-end md:grid-cols-1 lg:grid-cols-2 gap-2'>
-        <div className='flex-col m-2'>
-          <label className='form-control w-full max-w-xs'>
-            <div className='label'>
-              <TokenInfo chainId={chain?.id} />
-            </div>
-            <TokenQuantityInput
-              onChange={setAmount}
-              quantity={amount}
-              maxValue={formatBalance(balance?.data?.value ?? BigInt(0))}
-            />
-          </label>
+        <div className='flex-col mb-4 items-center'>
+          <TokenQuantityInput
+            onChange={setAmount}
+            quantity={amount}
+            maxValue={formatBalance(balance?.data?.value ?? BigInt(0))}
+          />
+          {chain?.name && <TokenName name={chain?.name as string} />}
           <button
-            className='mt-2 w-60 items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-2 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
+            className='mt-2 w-60 items-center mx-auto justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-2 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
             onClick={handleSendTransaction}
-            disabled={!isValidToAddress || !address || Boolean(estimateError) || amount === ''}>
-            {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Send'}
+            disabled={amount === ''}>
+            {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Mint'}
           </button>
         </div>
       </div>

@@ -1,6 +1,6 @@
-import { Chain, optimismSepolia, sepolia, polygonMumbai } from 'viem/chains'
+import { Chain, optimismSepolia, sepolia } from 'viem/chains'
 
-let chains = [optimismSepolia, sepolia, polygonMumbai] as [Chain, ...Chain[]]
+let chains = [optimismSepolia, sepolia] as [Chain, ...Chain[]]
 export const ETH_CHAINS = chains
 
 export const NETWORK_COLORS = {
