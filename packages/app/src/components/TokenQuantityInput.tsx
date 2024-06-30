@@ -48,7 +48,8 @@ export function TokenQuantityInput({
         type='text'
         placeholder='0.01'
         value={amount}
-        className='input input-bordered w-full max-w-xs'
+        className='w-[100%] rounded-md bg-gray-600 bg-opacity-20 px-4 py-3 text-base text-white outline-none'
+        pattern='^-?[0-9]\d*\.?\d*$'
         onChange={(e) => handleChange(e)}
       />
 
@@ -67,7 +68,7 @@ export function TokenQuantityInput({
         min={0}
         step={smallestStep}
         max={maxValue ?? 100}
-        className={`${displayRangeInput ? 'block' : 'hidden'} range range-xs`}
+        className='range range-xs'
       />
     </div>
   )

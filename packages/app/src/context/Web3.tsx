@@ -1,5 +1,6 @@
 'use client'
-
+import '@rainbow-me/rainbowkit/styles.css'
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PropsWithChildren } from 'react'
@@ -14,7 +15,7 @@ const queryClient = new QueryClient()
 
 createWeb3Modal({
   wagmiConfig: WALLETCONNECT_CONFIG,
-  projectId: WALLETCONNECT_PROJECT_ID,
+  projectId: WALLETCONNECT_PROJECT_ID as string,
   enableAnalytics: false, // Optional - defaults to your Cloud configuration
   enableOnramp: true,
 })
@@ -23,7 +24,9 @@ export function Web3Provider(props: Props) {
   return (
     <>
       <WagmiProvider config={WALLETCONNECT_CONFIG} initialState={props.initialState}>
-        <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider>{props.children}</RainbowKitProvider>
+        </QueryClientProvider>
       </WagmiProvider>
     </>
   )

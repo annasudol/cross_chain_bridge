@@ -102,7 +102,7 @@ export default function SendToken() {
       </label>
 
       {isValidTokenAddress && balanceData && (
-        <div className='flex align-end grid md:grid-cols-1 lg:grid-cols-2 gap-4 mt-10'>
+        <div className='flex align-end md:grid-cols-1 lg:grid-cols-2 gap-4 mt-10'>
           <div className='flex-col m-2 '>
             <label className='form-control w-full max-w-xs'>
               <div className='label py-2'>

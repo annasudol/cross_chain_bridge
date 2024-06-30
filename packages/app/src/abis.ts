@@ -679,7 +679,7 @@ export const mathAbi = [{ type: 'error', inputs: [], name: 'MathOverflowedMulDiv
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xF11f180eE37dd6aa7dD08b8C1Cd670fC4DBE0e34)
+ * [__View Contract on lia Etherscan__](https://sepolia.etherscan.io/address/0xF11f180eE37dd6aa7dD08b8C1Cd670fC4DBE0e34)
  */
 export const messageAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },

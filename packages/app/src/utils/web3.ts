@@ -3,13 +3,13 @@ import { cookieStorage, createStorage } from 'wagmi'
 import { SITE_INFO, SITE_NAME, SITE_URL } from './site'
 import { ETH_CHAINS } from './network'
 
-export const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? '31e3d7365b3e9c582c4e597f21572ce8'
+export const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
 if (!WALLETCONNECT_PROJECT_ID) {
   console.warn('You need to provide a NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID env variable')
 }
 
 export const WALLETCONNECT_CONFIG = defaultWagmiConfig({
-  projectId: WALLETCONNECT_PROJECT_ID,
+  projectId: WALLETCONNECT_PROJECT_ID as string,
   chains: ETH_CHAINS,
   ssr: true,
   metadata: {

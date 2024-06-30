@@ -7,11 +7,7 @@ import { LinkComponent } from './LinkComponent'
 export function Footer() {
   return (
     <>
-      <div className='place-self-end'>
-        <NetworkStatus />
-      </div>
-
-      <footer className='sticky top-[100vh] footer flex justify-between items-center bg-neutral text-neutral-content p-4'>
+      <footer className='sticky top-[100vh] footer flex justify-between items-center text-slate-100 p-4 bg-indigo-950'>
         <p>
           {SITE_EMOJI} {SITE_INFO}
         </p>
@@ -20,6 +16,7 @@ export function Footer() {
             <FaGithub />
           </LinkComponent>
         </div>
+        <NetworkStatus />
       </footer>
     </>
   )

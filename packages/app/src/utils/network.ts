@@ -1,40 +1,20 @@
-import { mainnet, arbitrum, base, linea, polygon, optimism, scroll } from 'viem/chains'
-import { Chain, hardhat, sepolia } from 'viem/chains'
+import { Chain, optimismSepolia, sepolia, polygonMumbai } from 'viem/chains'
 
-let chains = [mainnet, arbitrum, base, linea, polygon, optimism, scroll] as [Chain, ...Chain[]]
-
-if (process.env.NODE_ENV !== 'production') chains.push(sepolia, hardhat)
-
+let chains = [optimismSepolia, sepolia, polygonMumbai] as [Chain, ...Chain[]]
 export const ETH_CHAINS = chains
 
 export const NETWORK_COLORS = {
-  ethereum: {
+  sepolia: {
     color: 'green',
     bgVariant: 'bg-green-600',
   },
-  arbitrum: {
+  polygonMumbai: {
     color: 'sky',
     bgVariant: 'bg-sky-600',
-  },
-  base: {
-    color: 'blue',
-    bgVariant: 'bg-blue-600',
-  },
-  linea: {
-    color: 'slate',
-    bgVariant: 'bg-slate-600',
-  },
-  polygon: {
-    color: 'purple',
-    bgVariant: 'bg-purple-600',
   },
   optimism: {
     color: 'red',
     bgVariant: 'bg-red-600',
-  },
-  scroll: {
-    color: 'amber',
-    bgVariant: 'bg-amber-600',
   },
   other: {
     color: 'gray',
@@ -44,13 +24,8 @@ export const NETWORK_COLORS = {
 
 export function GetNetworkColor(chain?: string, type: 'color' | 'bgVariant' = 'color') {
   chain = chain?.toLocaleLowerCase()
-  if (chain === 'ethereum' || chain === 'mainnet' || chain === 'homestead') return NETWORK_COLORS.ethereum[type]
-  if (chain?.includes('arbitrum')) return NETWORK_COLORS.arbitrum[type]
-  if (chain?.includes('base')) return NETWORK_COLORS.base[type]
-  if (chain?.includes('linea')) return NETWORK_COLORS.linea[type]
-  if (chain?.includes('polygon') || chain?.includes('matic')) return NETWORK_COLORS.polygon[type]
-  if (chain?.includes('optimism') || chain?.startsWith('op')) return NETWORK_COLORS.optimism[type]
-  if (chain?.includes('scroll')) return NETWORK_COLORS.scroll[type]
-
+  if (chain === 'sepolia') return NETWORK_COLORS.sepolia[type]
+  if (chain?.includes('polpolygonMumbaiygon')) return NETWORK_COLORS.polygonMumbai[type]
+  if (chain?.includes('optimism')) return NETWORK_COLORS.optimism[type]
   return NETWORK_COLORS.other[type]
 }

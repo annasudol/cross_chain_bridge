@@ -11,7 +11,7 @@ import { SwitchNetworkBtn } from './SwitchNetworkBtn'
 
 type Address = `0x${string}` | undefined
 
-export function Bridge() {
+export function Mint() {
   const [to, setTo] = useState<Address>(undefined)
   const [isValidToAddress, setIsValidToAddress] = useState<boolean>(false)
   const [amount, setAmount] = useState('0.01')
@@ -88,7 +88,7 @@ export function Bridge() {
             />
           </label>
           <button
-            className='mt-2 w-60 items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-2 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:opacity-30'
+            className='mt-2 w-60 items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-2 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
             onClick={handleSendTransaction}
             disabled={!isValidToAddress || !address || Boolean(estimateError) || amount === ''}>
             {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Send'}
