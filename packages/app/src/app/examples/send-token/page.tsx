@@ -82,6 +82,7 @@ export default function SendToken() {
         type: 'error',
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txSuccess, txError])
 
   return (

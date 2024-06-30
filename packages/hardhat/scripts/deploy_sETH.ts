@@ -1,19 +1,20 @@
-/* eslint-disable prettier/prettier */
-import { ethers } from 'hardhat'
-import saveFrontendFiles from '../utils/saveFrontendFiles'
+
+import { ethers } from 'hardhat';
+import saveFrontendFiles from "../utils/saveFrontendFiles";
 
 async function main() {
-    const [deployer] = await ethers.getSigners()
+    const [deployer] = await ethers.getSigners();
     const symbol = 'sETH'
-    console.log('Deploying contracts with the account:', deployer.address)
-    const Token = await ethers.getContractFactory('Token')
-    const token_ETH = await Token.deploy('Eth_Sepolia', symbol, 100)
-    await token_ETH.deployed()
-    console.log(`Token ${symbol} deployed on ${token_ETH.address}`)
-    saveFrontendFiles('TOKEN_ETH_ADDRESS', token_ETH.address)
+    console.log("Deploying contracts with the account:", deployer.address);
+    const Token = await ethers.getContractFactory("Token");
+    const token = await Token.deploy('Eth_Sepolia', symbol, 100);
+    await token.deployed();
+    console.log(`Token ${symbol} deployed on ${token.address}`);
+    saveFrontendFiles('TOKEN_oETH_ADDRESS', token.address);
 }
 
+
 main().catch((error) => {
-    console.error(error)
-    process.exitCode = 1
-})
+    console.error(error);
+    process.exitCode = 1;
+});

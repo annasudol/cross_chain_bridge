@@ -1,42 +1,76 @@
-# Smart Contracts
+# Cross chain bridge
+app, which executes the ERC20 tokens(eETH, bETH and mETH) between Goerli, Binance Testnet and Matic Mumbai Testnet, and reversely.
 
-This project demonstrates how to add smart contracts to your project using [Hardhat](https://hardhat.org/docs). It provides a sample `Message` contract, a test and deployment scripts.
+The project was built using solidity and hardhat. Contracts are tested with full coverage and deployed on Goerli Ethereum Testnet Network, Binance Testnet Network, Matic Mumbai Testnet Networks
 
-Try running some of the following tasks:
+add .env file
+```bash
+npm install
+npx hardhat test
+npx hardhat coverage
+```
+## Contract deployments on Ethereum Sepolia
+```bash
+npx hardhat run scripts/deploy_sETH.ts --network sepolia
+npx hardhat run scripts/deploy_bridge_sETH.ts --network sepolia
+npx hardhat grantRole --bridge [bridgeAddress] --token [sETH address] --network sepolia
+
 
 ```
-yarn build
-yarn deploy
-yarn test
-yarn coverage
-```
-
-## Deploy
-
-Once you're ready to deploy your contracts, setup a deployer account using `DEPLOYER_KEY` and try to run e.g.
+## Contract deployments on Binance Testnet
+```bash
+npx hardhat run scripts/deploy_BSC.ts --network bscTestnet
+npx hardhat run scripts/deploy_bridge_BSC.ts --network bscTestnet
+npx hardhat grantRole --bridge [bridgeAddress] --token [BSC address] --network bscTestnet
 
 ```
-yarn deploy --network sepolia
+
+## Taks for swap from Ethereum to Binance
+```tasks
+1. npx hardhat swapETH --to [address] --value [value] --network sepolia
+2. then copy values from console for redeem with signature
+
+//eg. npx hardhat swapETH --to 0xd06ffA953497355eEce263007D88966Ef888b21F --value 100000 --network sepolia
+```
+## Taks for swap from Binance to Ethereum
+```tasks
+1. npx hardhat swapBSC --to [address] --value [value] --network bsctestnet
+2. then copy values from console for redeem with signature
 ```
 
-Note that you need testnet Ethers for that. More info and faucet links can be found on [Sepolia Dev](https://sepolia.dev/). You can set up different networks using [Hardhat's network configuration](https://hardhat.org/hardhat-runner/docs/config#networks-configuration).
+## swaps explained
+when Swap token from Ethereum to Binance
+1. eETH tokens are burn on Ethereum contract by Bridge ETH
+2. Signed message is created
+3. Reedem function can be run with created previously message, then: Tokens bETH are minted on the Binance network
 
-## Verify
+Swap token from Binance to Ethereum
+1. bETH tokens are burn on Binance ERC20 contract by Bridge BSC
+2. Signed message is created
+3. Reedem function can be run with created previously message, then: eETH Tokens are minted on the Ethereum network
 
-Contracts are automatically verified on Etherscan if you've set up the `ETHERSCAN_API_KEY` environment variable. You can also verify contracts manually using
+/////------------------------TOKENS----------------------------------//////
+## Token sETH on Sepolia Tesnet 
+### 0xD3A6c5d1c15B74a20D08a37C9F4dBcbF02f6906a
+[contract at sepolia.etherscan.io] (https://sepolia.etherscan.io/address/0xD3A6c5d1c15B74a20D08a37C9F4dBcbF02f6906a#code)
 
+## Token_BSC on Binance Testnet 
+### BSC 0xf121DaF9eDdF06F3f7DD56952F6BFd000BFffA61
+[contract at bscscan] (https://testnet.bscscan.com/address/0xf121DaF9eDdF06F3f7DD56952F6BFd000BFffA61#code)
+
+
+/////------------------------BRIDGES----------------------------------//////
+## Bridge Ethereum
+### Sepolia 0x134Ec954683104acc9467E0b275ED995FF9C8007
+[contract at sepolia.etherscan.io] (https://sepolia.etherscan.io/address/0x134Ec954683104acc9467E0b275ED995FF9C8007)
+
+
+## Bridge Bscscan 
+### Bscscan 0xA097413a69B55fe1aB8D6F0a4612CdAaA21dc725
+[contract at testnet bscscan] (https://testnet.bscscan.com/address/0xA097413a69B55fe1aB8D6F0a4612CdAaA21dc725#code)
+
+# Frontend app built with next.js - work in progress
 ```
-yarn verify <address> --network <network>
-```
-
-It is recommend to verifying manually after deployment as it also automatically verifies contracts on [Sourcify](https://sourcify.dev/).
-
-## Wagmi CLI
-
-The front-end uses the [Wagmi CLI](https://wagmi.sh/cli/getting-started) to automatically generate types and default hooks for your contracts.
-
-You need to run the following command from `packages/app`, which will generate the files in the same package at `src/abi.test`.
-
-```
-yarn wagmi
+yarn
+yarn run dev
 ```
