@@ -5,9 +5,10 @@ interface TokenInfoProps {
 }
 
 export const TokenName: React.FC<TokenInfoProps> = ({ name }) => (
-  <div className='flex py-8'>
+  <div className='flex py-8 items-center'>
     <p className='text-white pr-2'>To</p>
-    <span>{name === 'OptimismSepolia' ? 'oETH' : 'sETH'}</span>
+   <div className='flex bg-indigo-900 px-2 py-1 rounded-full'>
+     <span className='pl-1'>{name === 'OptimismSepolia' ? 'oETH' : 'sETH'}</span>
     <Image
       width={20}
       height={20}
@@ -15,5 +16,6 @@ export const TokenName: React.FC<TokenInfoProps> = ({ name }) => (
       src={Ethereum.src}
       alt='ethereum'
     />
+   </div>
   </div>
 )

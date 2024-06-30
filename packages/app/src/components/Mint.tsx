@@ -16,10 +16,6 @@ export function Mint() {
   const balance = useBalance({
     address,
   })
-  //   const { data: estimateData, error: estimateError } = useEstimateGas({
-  //     to: isValidToAddress ? (to as Address) : undefined,
-  //     value: parseEther(amount),
-  //   })
 
   const { data, sendTransaction } = useSendTransaction()
 
@@ -76,10 +72,10 @@ export function Mint() {
           />
           {chain?.name && <TokenName name={chain?.name as string} />}
           <button
-            className='mt-2 w-60 items-center mx-auto justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-2 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
+            className='mt-2 w-full items-center mx-auto justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
             onClick={handleSendTransaction}
             disabled={amount === ''}>
-            {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Mint'}
+            {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Continue to Mint'}
           </button>
         </div>
       </div>
