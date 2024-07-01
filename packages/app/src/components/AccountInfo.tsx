@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Ethereum from '@/assets/icons/ethereum.png'
 import { TokenBalance } from '@/components/TokenBalance'
 
-import { TokenInfo } from '@/components/TokenInfo'
 
 export function AccountInfo() {
   const { address, chain } = useAccount()
@@ -17,7 +16,6 @@ export function AccountInfo() {
         </div>
         <div className='stat-title '>Your balance</div>
         {/* {address ? <TokenBalance address={address} /> : <p>Please connect your wallet</p>} */}
-        <TokenInfo chainId={chain?.id} />
       </div>
     </div>
   )

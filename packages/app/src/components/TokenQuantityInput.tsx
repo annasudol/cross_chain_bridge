@@ -65,7 +65,6 @@ export function TokenQuantityInput({
         type='range'
         step={smallestStep}
         max={maxValue ?? 100}
-        // eslint-disable-next-line react/jsx-no-duplicate-props
         min={0.01}
         className='range range-xs'
       />

@@ -1,6 +1,5 @@
 'use client'
 import { Tab } from '@headlessui/react'
-
 import {Bridge } from '@/components/Bridge'
 import { Facet } from '@/components/Facet'
 
