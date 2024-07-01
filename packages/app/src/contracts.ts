@@ -213,7 +213,7 @@ export const chains: { [id: number]: { name: string, bridgeAddress: Address, tok
         tokenAddress: '0xD3A6c5d1c15B74a20D08a37C9F4dBcbF02f6906a'
     },
     97: {
-        name: "sBNC",
+        name: "sBSC",
         bridgeAddress: '0xA097413a69B55fe1aB8D6F0a4612CdAaA21dc725',
         tokenAddress: '0xf121DaF9eDdF06F3f7DD56952F6BFd000BFffA61'
     }

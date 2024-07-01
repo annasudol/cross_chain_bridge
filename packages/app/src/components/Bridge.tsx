@@ -84,7 +84,7 @@ export function Bridge() {
             className='mt-4 w-full items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:opacity-30'
             onClick={handleSendTransaction}
             disabled={!address || amount === ''}>
-            {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Send'}
+            {isLoading ? <span className='loading loading-dots loading-sm'></span> : `Swap to ${chains[chain?.id as number].name === 'sETH' ? 'sBCS' : 'sETH'}`}
           </button>
       </div>
     </div>
