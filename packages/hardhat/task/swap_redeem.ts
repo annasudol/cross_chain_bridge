@@ -12,10 +12,10 @@ const BRIDGE_ETH_ADDRESS: string = process.env.BRIDGE_ETH_Address!;
 const BRIDGE_BSC_ADDRESS: string = process.env.BRIDGE_BSC_ADDRESS!;
 const chainID_ETH = 5;
 const chainID_BSC = 97;
-const eETH = "eETH";
-const bETH = "bETH";
+const eETH = "sETH";
+const bETH = "BSC";
 
-//eg. npx hardhat swapETH --to 0x80dD5aD6B8775c4E31C999cA278Ef4D035717872 --value 100000000000 --network goerli
+//eg. npx hardhat swapETH --to 0xd06ffA953497355eEce263007D88966Ef888b21F --value 10 --network sepolia
 task("swapETH", "swap tokens from Ethereum to Binance")
     .addParam("to", "address to swap")
     .addParam("value", "add value ETh to swap to Binance")
@@ -35,7 +35,7 @@ task("swapETH", "swap tokens from Ethereum to Binance")
                 const messageHash = await signMessage(acc0.address, to, value, chainID_BSC, bETH, validator);
                 balance = await eth_token.balanceOf(acc0.address);
                 console.log(`Balance of giver is ${hre.ethers.utils.formatEther(balance)} eETH`);
-                console.log(`Run: npx hardhat redeemBSC --to ${to} --value ${value} --signature ${messageHash} --network bsctestnet`)
+                console.log(`Run: npx hardhat redeemBSC --to ${to} --value ${value} --signature ${messageHash} --network bscTestnet`)
             }
         } catch (err: any) {
             console.log(`swap error: ${err.message}`)
@@ -49,16 +49,16 @@ task("redeemBSC", "approve swapped tokens from Ethereum to Binance")
     .setAction(async (taskArgs, hre) => {
         try {
             const bridgeBSC = await hre.ethers.getContractAt("Bridge", BRIDGE_BSC_ADDRESS);
-            const bEth_token = await hre.ethers.getContractAt("Token", TOKEN_BSC_ADDRESS);
+            const BSC_token = await hre.ethers.getContractAt("Token", TOKEN_BSC_ADDRESS);
 
             const { value, to, signature } = taskArgs;
             const [acc0] = await hre.ethers.getSigners();
 
-            let balance = await bEth_token.balanceOf(to);
+            let balance = await BSC_token.balanceOf(to);
             console.log(`Started Redeemed to ${to}. Balance of receiver ${hre.ethers.utils.formatEther(balance)} bETH`);
             const tx_redeem = await bridgeBSC.redeem(acc0.address, to, value, 0, chainID_BSC, bETH, signature);
             if (tx_redeem.hash) {
-                balance = await bEth_token.balanceOf(to);
+                balance = await BSC_token.balanceOf(to);
                 console.log(`Redeem successfully to Ethereum to Binance, tx.id ${tx_redeem.hash}`);
                 console.log(`Balance of Receiver after redeem is ${balance} bETH`);
             }

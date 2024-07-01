@@ -49,6 +49,7 @@ Swap token from Binance to Ethereum
 2. Signed message is created
 3. Reedem function can be run with created previously message, then: eETH Tokens are minted on the Ethereum network
 
+npx hardhat swapETH --to 0xd06ffA953497355eEce263007D88966Ef888b21F --value 100 --network sepolia
 /////------------------------TOKENS----------------------------------//////
 ## Token sETH on Sepolia Tesnet 
 ### 0xD3A6c5d1c15B74a20D08a37C9F4dBcbF02f6906a
