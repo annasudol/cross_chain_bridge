@@ -32,7 +32,7 @@ export function Facet(){
   return (
     <div className='px-4 text-white flex flex-col justify-between h-full'>
       {chain?.name && <div className='flex items-center'>
-        <TokenInfoImg name={chain?.name as string} title='Receive' />
+        <TokenInfoImg name={chain?.name as string} title='Receive'  id={chain.id} />
         <SwitchNetworkBtn label='on' />
       </div>}
       <div>{address && chain?.id && <p>Your balance: <TokenBalance setBalance={setBalance} balance={balance} address={address} tokenAddress={chains[chain?.id].tokenAddress} /><span className='text-white mx-2'>{chains[chain?.id as number]?.name} </span></p>}</div>

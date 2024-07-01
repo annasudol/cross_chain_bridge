@@ -1,15 +1,17 @@
 import Image from 'next/image'
 import Ethereum from '@/assets/icons/ethereum.png'
+import { TokenName } from '@/components/TokenName'
 interface TokenInfoImgProps {
   name: string
   title?: string
+  id: number
 }
 
-export const TokenInfoImg: React.FC<TokenInfoImgProps> = ({ name, title }) => (
+export const TokenInfoImg: React.FC<TokenInfoImgProps> = ({ name, title, id }) => (
   <div className='flex py-8 items-center'>
     {title && <p className='text-white pr-2 text-lg'>{title}</p>}
    <div className='flex bg-indigo-900 px-2 py-1 rounded-full'>
-     <span className='pl-1'>{name === 'OptimismSepolia' ? 'oETH' : 'sETH'}</span>
+    <TokenName chainId={id} />
     <Image
       width={20}
       height={20}

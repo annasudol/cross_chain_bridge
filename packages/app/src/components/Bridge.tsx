@@ -7,7 +7,7 @@ import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { TokenName } from '@/components/TokenName'
 import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
 import { TokenBalance } from '@/components/TokenBalance'
-import { chains } from '../contracts';
+import { brideABI, chains } from '../contracts';
 import { parseAbi, toBytes } from 'viem'
 
 export function Bridge() {
@@ -23,7 +23,7 @@ export function Bridge() {
 
         writeContract({
         address: chains[chain?.id].bridgeAddress,
-        abi: parseAbi(['function swap(address to, uint256 amount, uint256 nonce, uint256 chainId, string symbol)']),
+        abi: brideABI,
         functionName: 'swap',
         args: [address, BigInt(1), BigInt(10) ,BigInt(chain.id), chains[chain?.id as number]?.name]
     })} else {
