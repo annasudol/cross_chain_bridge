@@ -7,28 +7,20 @@ import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { formatBalance } from '@/utils/formatBalance'
 import { TokenInfo } from '@/components/TokenInfo'
-import { SwitchNetworkBtn } from './SwitchNetworkBtn'
+import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
+import { TokenBalance } from '@/components/TokenBalance'
+import { chains } from '../contracts';
 
 type Address = `0x${string}` | undefined
 
 export function Bridge() {
-  const [to, setTo] = useState<Address>(undefined)
-  const [isValidToAddress, setIsValidToAddress] = useState<boolean>(false)
   const [amount, setAmount] = useState('0.01')
-
   const { Add } = useNotifications()
-
   const { address, chain } = useAccount()
-  const balance = useBalance({
-    address,
-  })
-  const { data: estimateData, error: estimateError } = useEstimateGas({
-    to: isValidToAddress ? (to as Address) : undefined,
-    value: parseEther(amount),
-  })
-
+  // const balance = useBalance({
+  //   address,
+  // })
   const { data, sendTransaction } = useSendTransaction()
-
   const {
     isLoading,
     error: txError,
@@ -36,25 +28,26 @@ export function Bridge() {
   } = useWaitForTransactionReceipt({
     hash: data,
   })
+  const [balance, setBalance] = useState<string>();
 
   const handleSendTransaction = () => {
-    if (estimateError) {
-      Add(`Transaction failed: ${estimateError.cause}`, {
-        type: 'error',
-      })
-      return
-    }
-    sendTransaction({
-      gas: estimateData,
-      value: parseEther(amount),
-      to: (to as Address)!,
-    })
+    // if (estimateError) {
+    //   Add(`Transaction failed: ${estimateError.cause}`, {
+    //     type: 'error',
+    //   })
+    //   return
+    // }
+    // sendTransaction({
+    //   gas: estimateData,
+    //   value: parseEther(amount),
+    //   to: (to as Address)!,
+    // })
   }
 
-  const handleToAdressInput = (to: string) => {
-    if (to.startsWith('0x')) setTo(to as `0x${string}`)
-    else setTo(`0x${to}`)
-    setIsValidToAddress(isAddress(to))
+  const handleToAddressInput = (to: string) => {
+    // if (to.startsWith('0x')) setTo(to as `0x${string}`)
+    // else setTo(`0x${to}`)
+    // setIsValidToAddress(isAddress(to))
   }
 
   useEffect(() => {
@@ -63,7 +56,7 @@ export function Bridge() {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${data}` : undefined,
       })
-      balance.refetch()
+      // balance.refetch()
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
@@ -73,27 +66,26 @@ export function Bridge() {
   }, [txSuccess, txError])
 
   return (
-    <div className='flex-column align-center p-4'>
+    <div className='p-6'>
       <SwitchNetworkBtn />
-      <div className='flex flex-col-reverse align-end md:grid-cols-1 lg:grid-cols-2 gap-2'>
-        <div className='flex-col m-2'>
-          <label className='form-control w-full max-w-xs'>
+      <div className='py-2 pl-1'>{address && chain?.id && <p>Your balance: <TokenBalance setBalance={setBalance} balance={balance} address={address} tokenAddress={chains[chain?.id].tokenAddress} /><span className='text-white mx-2'>{chains[chain?.id as number].name} </span></p>}</div>
+        <div className='flex flex-col m-2'>
+          <label className='form-control w-full'>
             <div className='label'>
               <TokenInfo chainId={chain?.id} />
             </div>
             <TokenQuantityInput
               onChange={setAmount}
               quantity={amount}
-              maxValue={formatBalance(balance?.data?.value ?? BigInt(0))}
+              maxValue={balance}
             />
           </label>
           <button
-            className='mt-2 w-60 items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-2 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:opacity-30'
+            className='mt-4 w-full items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:opacity-30'
             onClick={handleSendTransaction}
-            disabled={!isValidToAddress || !address || Boolean(estimateError) || amount === ''}>
+            disabled={!address || amount === ''}>
             {isLoading ? <span className='loading loading-dots loading-sm'></span> : 'Send'}
           </button>
-        </div>
       </div>
     </div>
   )

@@ -16,7 +16,7 @@ export function AccountInfo() {
           <Image width={50} className='opacity-50 ml-10' src={Ethereum.src} alt='ethereum' />
         </div>
         <div className='stat-title '>Your balance</div>
-        {address ? <TokenBalance address={address} /> : <p>Please connect your wallet</p>}
+        {/* {address ? <TokenBalance address={address} /> : <p>Please connect your wallet</p>} */}
         <TokenInfo chainId={chain?.id} />
       </div>
     </div>

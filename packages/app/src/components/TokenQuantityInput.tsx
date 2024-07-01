@@ -5,14 +5,12 @@ interface TokenQuantityInputProps {
   onChange: (amount: string) => void
   quantity: string
   maxValue?: string
-  displayRangeInput?: boolean
   displayMaxClearButtons?: boolean
 }
 export function TokenQuantityInput({
   onChange,
   quantity,
   maxValue,
-  displayRangeInput = true,
   displayMaxClearButtons = true,
 }: TokenQuantityInputProps) {
   const [amount, setAmount] = useState('0.00')

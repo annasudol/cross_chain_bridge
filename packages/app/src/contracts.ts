@@ -210,7 +210,7 @@ export const chains: { [id: number]: { name: string, bridgeAddress: Address, tok
     11155111: {
         name: "sETH",
         bridgeAddress: '0x134Ec954683104acc9467E0b275ED995FF9C8007',
-        tokenAddress: '0xa5E672A0fCa1Dd75561a741A459D630Fa640E232'
+        tokenAddress: '0xD3A6c5d1c15B74a20D08a37C9F4dBcbF02f6906a'
     },
     97: {
         name: "sBNC",

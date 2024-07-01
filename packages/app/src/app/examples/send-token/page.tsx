@@ -137,11 +137,7 @@ export default function SendToken() {
                   <img className='opacity-25 ml-10' width={50} src={Token.src} alt='token' />
                 </div>
                 <div className='stat-title '>Your balance</div>
-                {tokenAddress && address ? (
-                  <TokenBalance address={address} tokenAddress={tokenAddress} />
-                ) : (
-                  <p>Please connect your wallet</p>
-                )}
+               
               </div>
             </div>
             <button
