@@ -216,7 +216,6 @@ function Balance() {
   return (
     <div>
       <h2>Balance</h2>
-
       <div>
         Balance (Default Chain):{' '}
         {!!default_?.value && formatEther(default_.value)}
@@ -281,8 +280,6 @@ function ReadContract() {
     functionName: 'balanceOf',
     args: ['0x03A71968491d55603FFe1b11A9e23eF013f75bCF'],
   })
-  console.log(balance, 'data')
-
   return (
     <div>
       <h2>Read Contract</h2>
@@ -339,9 +336,7 @@ function WriteContract() {
   }
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    })
+    useWaitForTransactionReceipt({hash})
 
   return (
     <div>

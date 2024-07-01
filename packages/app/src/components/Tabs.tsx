@@ -1,17 +1,15 @@
 'use client'
 import { Tab } from '@headlessui/react'
-import { useState } from 'react'
-import { Mint } from '@/components/Mint'
-// import { useBridgeContract, useTokenContract } from '@/hooks/useContract';
-// import { Bridge } from '../Bridge'
-// import { Facet } from '../Facet'
+
+import {Bridge } from '@/components/Bridge'
+import { Facet } from '@/components/Facet'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export const Tabs = () => {
-  const categories = ['Mint', 'Unlock']
+  const categories = ['Bridge', 'Facet']
   return (
     <div className='mt-16 w-full max-w-xl py-16 sm:px-0'>
       <Tab.Group>
@@ -32,7 +30,7 @@ export const Tabs = () => {
         <Tab.Panels className='mt-2'>
           {categories.map((_cat, idx) => (
             <Tab.Panel key={idx} className='rounded-xl p-3 h-96 max-w-xl bg-indigo-950 focus:outline-none'>
-              {idx === 1 ? <p>redeem</p> : <Mint />}
+              {idx === 1 ? <Facet /> : <Bridge />}
             </Tab.Panel>
           ))}
         </Tab.Panels>
