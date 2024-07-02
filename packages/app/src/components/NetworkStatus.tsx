@@ -14,7 +14,7 @@ export function NetworkStatus() {
 
   return (
     <div className='flex items-center gap-2 p-4'>
-      <div className={`badge badge-info ${color}`}>{networkName}</div>
+      <div className='px-4 py-1 bg-zinc-700 text-stone-50 rounded-full'>{networkName}</div>
       {explorerUrl && (
         <LinkComponent href={explorerUrl}>
           <p className='text-xs'># {block.data?.toString()}</p>

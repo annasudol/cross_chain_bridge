@@ -37,22 +37,3 @@ export const config = createConfig({
     [bscTestnet.id]: http(),
   },
 })
-
-// export const wagmiConfig = defaultWagmiConfig({
-//   chains: [mainnet, sepolia, bscTestnet], // required
-//   projectId, // required
-//   metadata, // required
-//   ssr: true,
-//   transports: {
-//     [mainnet.id]: http(),
-//     [sepolia.id]: http(),
-//     [bscTestnet.id]: http('https://data-seed-prebsc-1-s1.binance.org:8545'),
-//   },
-//   storage: createStorage({
-//     storage: cookieStorage,
-//   }),
-//   enableWalletConnect: true, // Optional - true by default
-//   enableInjected: true, // Optional - true by default
-//   enableEIP6963: true, // Optional - true by default
-//   enableCoinbase: true, // Optional - true by default
-// });

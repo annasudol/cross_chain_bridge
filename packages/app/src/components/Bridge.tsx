@@ -1,14 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { useAccount, useWriteContract} from 'wagmi'
-import { FormEvent, useState } from 'react'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt} from 'wagmi'
+import { FormEvent, useEffect, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { TokenName } from '@/components/TokenName'
 import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
 import { TokenBalance } from '@/components/TokenBalance'
-import { brideABI, chains } from '../contracts';
-import { parseAbi, toBytes } from 'viem'
+import { chains } from '../contracts';
+import { parseAbi, parseEther } from 'viem'
 
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
@@ -17,21 +17,40 @@ export function Bridge() {
   const [balance, setBalance] = useState<string>();
   const { data: hash, error, isPending, writeContract } = useWriteContract()
 
+  const {
+    isLoading,
+    error: txError,
+    isSuccess: txSuccess,
+  } = useWaitForTransactionReceipt({hash})
   async function handleSendTransaction(event: FormEvent) {
     event.preventDefault()
     if(chain && address) {
-
-        writeContract({
+      writeContract({
         address: chains[chain?.id].bridgeAddress,
-        abi: brideABI,
+        abi: parseAbi(['function swap(address to, uint256 amount, uint256 nonce, uint256 chainId, string symbol)']),
         functionName: 'swap',
-        args: [address, BigInt(1), BigInt(10) ,BigInt(chain.id), chains[chain?.id as number]?.name]
-    })} else {
-      console.log('h')
-
+        args: [address, parseEther(amount), BigInt(0), BigInt(chains[chain?.id].id), chains[chain?.id].name]
+    })
+  } else {
+      Add(`Unknown chain ID or an address`, {
+        type: 'error',
+      })
     }
-    console.log(error, 'error')
   }
+    useEffect(() => {
+    if (txSuccess) {
+      Add(`Transaction successful`, {
+        type: 'success',
+        href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
+      })
+    } else if (txError) {
+      Add(`Transaction failed: ${txError.cause}`, {
+        type: 'error',
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txSuccess, txError])
+
 
   return (
     <div className='p-6'>
@@ -52,7 +71,7 @@ export function Bridge() {
             className='mt-4 w-full items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:opacity-30'
             onClick={handleSendTransaction}
             disabled={!address || amount === ''}>
-            {isPending ? <span className='loading loading-dots loading-sm'></span> : `Swap to ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
+            {isPending || isLoading ? <span className='loading loading-dots loading-sm'></span> : `Swap to ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
           </button>
       </div>
     </div>
