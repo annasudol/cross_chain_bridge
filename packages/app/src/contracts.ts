@@ -1,4 +1,4 @@
-import { Address } from "viem"
+import { Address } from 'viem'
 
 export const wagmiContractConfig = {
     address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
@@ -203,18 +203,21 @@ export const wagmiContractConfig = {
     ],
 } as const
 
-
-export const chains: { [id: number]: { name: string, bridgeAddress: Address, tokenAddress: Address, id: number } } = {
+export const chains: {
+    [id: number]: { name: string; bridgeAddress: Address; tokenAddress: Address; id: number; swapTokens: string[] }
+} = {
     11155111: {
-        name: "sETH",
-        bridgeAddress: '0x134Ec954683104acc9467E0b275ED995FF9C8007',
-        tokenAddress: '0xD3A6c5d1c15B74a20D08a37C9F4dBcbF02f6906a',
-        id: 5
+        name: 'sETH',
+        bridgeAddress: '0x551312645f3112A65394247078E7709fD40CfE05',
+        tokenAddress: '0x640590C4F3d31e0614D550BA3bbf1eF414608763',
+        id: 11155111,
+        swapTokens: ['tBSC'],
     },
     97: {
-        name: "sBSC",
-        bridgeAddress: '0xA097413a69B55fe1aB8D6F0a4612CdAaA21dc725',
-        tokenAddress: '0xf121DaF9eDdF06F3f7DD56952F6BFd000BFffA61',
-        id: 97
-    }
+        name: 'tBSC',
+        bridgeAddress: '0x9ECA56d49309c4169Db5d9a0a5a99A51b3C3eeCd',
+        tokenAddress: '0x63cA1a726aD47D01AAcb6E7CEd023B96B3b49Cd9',
+        id: 97,
+        swapTokens: ['sETH'],
+    },
 }

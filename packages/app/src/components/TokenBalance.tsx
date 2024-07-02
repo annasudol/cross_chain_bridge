@@ -2,12 +2,12 @@
 import { useReadContract } from 'wagmi'
 import { Dispatch, useEffect } from 'react'
 import { erc20Abi, formatEther } from 'viem'
-import type {Address} from "viem"
+import type { Address } from 'viem'
 
 interface TokenBalanceProps {
   readonly address: Address
-  readonly tokenAddress?: Address;
-  balance?: string;
+  readonly tokenAddress?: Address
+  balance?: string
   setBalance: Dispatch<string>
 }
 
@@ -20,13 +20,13 @@ export const TokenBalance = ({ address, tokenAddress, balance, setBalance }: Tok
   })
 
   useEffect(() => {
-   if (tokenBalance.data) {
+    console.log(tokenBalance, 'tokenBalance');
+    if (tokenBalance.data) {
       setBalance(Number(formatEther(tokenBalance?.data)).toFixed(2))
       return
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenBalance.data])
 
-  return (
-    <span className='text-white'>{balance}</span>
-  )
+  return <span className='text-white'>{balance || 0}</span>
 }

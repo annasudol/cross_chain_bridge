@@ -2,24 +2,24 @@ import { ethers } from 'hardhat'
 import saveFrontendFiles from '../utils/saveFrontendFiles'
 
 const VALIDATOR_ADDRESS: string = process.env.VALIDATOR_ADDRESS!
-const TOKEN_sETH_ADDRESS: string = process.env.TOKEN_sETH_ADDRESS!
-const chainID_ETH = 11155111
+const TOKEN_tBSC_ADDRESS: string = process.env.TOKEN_tBSC_ADDRESS!
+const chainID_BSC = 97
 
 async function main() {
   const Bridge = await ethers.getContractFactory('Bridge')
-  const bridge = await Bridge.deploy(VALIDATOR_ADDRESS, TOKEN_sETH_ADDRESS, chainID_ETH)
+  const bridge = await Bridge.deploy(VALIDATOR_ADDRESS, TOKEN_tBSC_ADDRESS, chainID_BSC)
   await bridge.deployed()
   console.log(
-    'bridge Ethereum deployed to:',
+    'bridge Binance testnet deployed to:',
     bridge.address,
     'with validator',
     VALIDATOR_ADDRESS,
-    'and TOKEN_sETH',
-    TOKEN_sETH_ADDRESS
+    'and TOKEN_tBSC',
+    TOKEN_tBSC_ADDRESS
   )
-  saveFrontendFiles('BRIDGE_sETH_Address', bridge.address)
+  saveFrontendFiles('bridgetBSC_Address', bridge.address)
   console.log(`\n run:`)
-  console.log(`\n npx hardhat grantRole --bridge ${bridge.address} --token ${TOKEN_sETH_ADDRESS} --network goerli`)
+  console.log(`\n npx hardhat grantRole --bridge ${bridge.address} --token ${TOKEN_tBSC_ADDRESS} --network bscTestnet`)
 }
 
 main().catch((error) => {
