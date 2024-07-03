@@ -57,16 +57,16 @@ contract Bridge {
 
     // takes hashed message and a signature, calls ecrecover to recover the signer and verifies 
     //if the recovered address is the validator address; if yes, transfers tokens to the receiver.
-    function redeem(address from, address to, uint256 amount, uint256 chainId, string memory symbol, bytes calldata signature)
-        checkValidERC20(symbol) chainIdIsSupported(chainId) public {
+    function redeem(address from, address to, uint256 amount, uint256 _chainId, string memory symbol, bytes calldata signature)
+        checkValidERC20(symbol) chainIdIsSupported(_chainId) public {
 
-        bytes32 message = keccak256(abi.encodePacked(from, to, amount, chainId, symbol));
+        bytes32 message = keccak256(abi.encodePacked(from, to, amount, _chainId, symbol));
         require(!redemeed[message], "re-entrance");
         require(_verify(message, signature), "invalid signature");
         redemeed[message]=true;
 
         Token(token).mint(to, amount);
-        emit RedeemInitialized(from, to, amount, chainId, symbol);
+        emit RedeemInitialized(from, to, amount, _chainId, symbol);
     }
 
     function _verify(bytes32 message, bytes calldata signature) internal view returns (bool) {

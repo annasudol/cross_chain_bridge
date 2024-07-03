@@ -19,7 +19,7 @@ async function main() {
   )
   saveFrontendFiles('BRIDGE_sETH_Address', bridge.address)
   console.log(`\n run:`)
-  console.log(`\n npx hardhat grantRole --bridge ${bridge.address} --token ${TOKEN_sETH_ADDRESS} --network goerli`)
+  console.log(`\n npx hardhat grantRole --bridge ${bridge.address} --token ${TOKEN_sETH_ADDRESS} --network sepolia`)
 }
 
 main().catch((error) => {

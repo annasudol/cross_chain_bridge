@@ -215,8 +215,8 @@ export const chains: {
     },
     97: {
         name: 'tBSC',
-        bridgeAddress: '0x9ECA56d49309c4169Db5d9a0a5a99A51b3C3eeCd',
-        tokenAddress: '0x63cA1a726aD47D01AAcb6E7CEd023B96B3b49Cd9',
+        bridgeAddress: '0xF5F65b8e87c48C475755F7D3e23Ab8fB7f71F923',
+        tokenAddress: '0xC13e06C53DC417C39e9a7fEfa60a6eE31afaB814',
         id: 97,
         swapTokens: ['sETH'],
     },
