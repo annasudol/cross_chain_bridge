@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { FormEvent, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { TokenName } from '@/components/TokenName'
@@ -11,6 +11,7 @@ import { chains } from '../contracts'
 import { parseAbi, parseEther } from 'viem'
 import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
+import { ButtonSubmit } from '@/components/ButtonSubmit'
 
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
@@ -20,10 +21,9 @@ export function Bridge() {
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
-  const [value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`, '')
+  const [setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`, '')
 
-  async function handleSendTransaction(event: FormEvent) {
-    event.preventDefault()
+  async function handleSendTransaction() {
     if (chain && address) {
       writeContract({
         address: chains[chain?.id].bridgeAddress,
@@ -90,16 +90,13 @@ export function Bridge() {
           <div className='label'>{chain?.id && <TokenName chainId={chain?.id} />}</div>
           <TokenQuantityInput onChange={setAmount} quantity={amount} maxValue={balance} />
         </label>
-        <button
-          className='mt-2 mb-8 w-full items-center mx-auto justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
+        <ButtonSubmit
           onClick={handleSendTransaction}
-          disabled={!address || Number(amount) < 0.01}>
-          {isPending || isLoading ? (
-            <span className='loading loading-dots loading-sm'></span>
-          ) : (
-            `Swap ${amount} ${chains[chain?.id as number]?.name} to ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`
-          )}
-        </button>
+          disabled={!address || Number(amount) < 0.01}
+          isLoading={isPending || isLoading}>
+          `Swap ${amount} ${chains[chain?.id as number]?.name} to $
+          {chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`
+        </ButtonSubmit>
       </div>
     </div>
   )
