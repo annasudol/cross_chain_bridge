@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { isAddress } from 'viem'
 import Image from 'next/image'
 import useEnsProfile from '@/app/hooks/useEnsProfile'
-import { truncateAddress } from '../utils/helpers/formatTools'
+import { truncateString } from '../utils/helpers/formatTools'
 
 interface AddressInputProps extends React.HTMLProps<HTMLInputElement> {
   onRecipientChange: (address: string, isValid: boolean) => void
@@ -74,7 +74,7 @@ export const AddressInput = ({ onRecipientChange, onRawInputChange, disabled = f
             </div>
           </div>
         )}
-        <span>{truncateAddress(ensAddy ?? '')}</span>
+        <span>{truncateString(ensAddy ?? '')}</span>
       </button>
     </div>
   )

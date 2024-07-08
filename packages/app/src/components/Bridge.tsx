@@ -21,7 +21,7 @@ export function Bridge() {
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
-  const [value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`, '')
+  const [value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
 
   async function handleSendTransaction() {
     if (chain && address) {
@@ -44,7 +44,7 @@ export function Bridge() {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
-      // setValue(`${amount}, ${address}, ${hash}`)
+      const token = chain?.id && chains[chain?.id].swapTokens[0]
       setValue(amount, address, hash)
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {
