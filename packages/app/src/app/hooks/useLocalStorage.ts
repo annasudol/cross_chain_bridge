@@ -19,9 +19,8 @@ const useLocalStorage = (key: string, initialValue: string) => {
         try {
             // If the passed value is a callback function,
             const valueToStore = [...state, { amount, address, hash }];
-            window.localStorage.clear();
-            // window.localStorage.setItem(key, JSON.stringify(valueToStore))
-            // setState(valueToStore)
+            window.localStorage.setItem(key, JSON.stringify(valueToStore))
+            setState(valueToStore)
         } catch (error) {
             console.log(error)
         }

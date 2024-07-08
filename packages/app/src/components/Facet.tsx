@@ -5,6 +5,7 @@ import { useState, useEffect, type FormEvent } from 'react'
 import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
 import { TokenInfoImg } from '@/components/TokenInfoImg'
 import { TokenBalance } from '@/components/TokenBalance'
+import { ButtonSubmit } from '@/components/ButtonSubmit'
 
 import { parseAbi } from 'viem'
 import { useWriteContract } from 'wagmi'
@@ -19,8 +20,7 @@ export function Facet() {
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
 
-  async function submit(event: FormEvent) {
-    event.preventDefault()
+  async function handleSendTransaction() {
     if (chain) {
       writeContract({
         address: chains[chain?.id].bridgeAddress,
@@ -89,18 +89,12 @@ export function Facet() {
           {chains[chain?.id as number]?.name} to {chains[chain?.id as number]?.swapTokens[0]}
         </p>
       </div>
-      <form onSubmit={submit}>
-        <button
-          className='mt-2 mb-8 w-full items-center mx-auto justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
-          onClick={submit}
-          disabled={isLoading || isPending}>
-          {isPending || isLoading ? (
-            <span className='loading loading-dots loading-sm'></span>
-          ) : (
-            `Click to receive ${chains[chain?.id as number]?.name}`
-          )}
-        </button>
-      </form>
+      <ButtonSubmit
+        onClick={handleSendTransaction}
+        disabled={isLoading || isPending}
+        isLoading={isPending || isLoading}>
+        Click to receive {chains[chain?.id as number]?.name}
+      </ButtonSubmit>
     </div>
   )
 }

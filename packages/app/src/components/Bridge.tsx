@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import {  useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { TokenName } from '@/components/TokenName'
@@ -21,7 +21,7 @@ export function Bridge() {
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
-  const [setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`, '')
+  const [value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`, '')
 
   async function handleSendTransaction() {
     if (chain && address) {
@@ -94,8 +94,8 @@ export function Bridge() {
           onClick={handleSendTransaction}
           disabled={!address || Number(amount) < 0.01}
           isLoading={isPending || isLoading}>
-          `Swap ${amount} ${chains[chain?.id as number]?.name} to $
-          {chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`
+          Swap {amount} {chains[chain?.id as number]?.name} to{' '}
+          {chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}
         </ButtonSubmit>
       </div>
     </div>
