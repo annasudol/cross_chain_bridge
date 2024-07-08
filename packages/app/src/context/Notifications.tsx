@@ -67,7 +67,8 @@ export function NotificationProvider(props: PropsWithChildren) {
     <NotificationContext.Provider value={{ Add, Clear, notifications }}>
       {props.children}
       <ToastContainer
-        limit={5}
+        limit={10}
+        autoClose={10000}
         theme='dark'
         position='bottom-center'
         toastClassName={() => 'flex relative bg-base-300 rounded-xl justify-between overflow-hidden p-2 mb-2'}

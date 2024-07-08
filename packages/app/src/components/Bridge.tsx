@@ -10,16 +10,15 @@ import { TokenBalance } from '@/components/TokenBalance'
 import { chains } from '../contracts'
 import { parseAbi, parseEther } from 'viem'
 import { Connect } from '@/components/Connect'
-import useNotify from '@/app/hooks/useNotify'
-
+import { createCookie } from '../app/actions'
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
-
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
+
   async function handleSendTransaction(event: FormEvent) {
     event.preventDefault()
     if (chain && address) {
@@ -35,12 +34,15 @@ export function Bridge() {
       })
     }
   }
+
   useEffect(() => {
+    const tokenSwap = chain?.id && chains[chain?.id].swapTokens[0];
     if (txSuccess) {
       Add(`Transaction successful`, {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
+      address && tokenSwap && createCookie(tokenSwap, amount, address)
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
@@ -86,13 +88,13 @@ export function Bridge() {
           <TokenQuantityInput onChange={setAmount} quantity={amount} maxValue={balance} />
         </label>
         <button
-          className='mt-4 w-full items-center justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:opacity-30'
+          className='mt-2 mb-8 w-full items-center mx-auto justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
           onClick={handleSendTransaction}
           disabled={!address || amount === ''}>
           {isPending || isLoading ? (
             <span className='loading loading-dots loading-sm'></span>
           ) : (
-            `Swap to ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`
+            `Swap ${amount} ${chains[chain?.id as number]?.name} to ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`
           )}
         </button>
       </div>

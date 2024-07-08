@@ -20,13 +20,12 @@ export const TokenBalance = ({ address, tokenAddress, balance, setBalance }: Tok
   })
 
   useEffect(() => {
-    console.log(tokenBalance, 'tokenBalance');
     if (tokenBalance.data) {
       setBalance(Number(formatEther(tokenBalance?.data)).toFixed(2))
       return
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenBalance.data])
+  }, [tokenBalance])
 
   return <span className='text-white'>{balance || 0}</span>
 }

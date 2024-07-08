@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Address } from 'viem'
 
 export const wagmiContractConfig = {
@@ -204,7 +205,14 @@ export const wagmiContractConfig = {
 } as const
 
 export const chains: {
-    [id: number]: { name: string; bridgeAddress: Address; tokenAddress: Address; id: number; swapTokens: string[] }
+    [id: number]: {
+        name: string
+        bridgeAddress: Address
+        tokenAddress: Address
+        id: number
+        swapTokens: string[]
+        swapTokensId: number[]
+    }
 } = {
     11155111: {
         name: 'sETH',
@@ -212,6 +220,7 @@ export const chains: {
         tokenAddress: '0x640590C4F3d31e0614D550BA3bbf1eF414608763',
         id: 11155111,
         swapTokens: ['tBSC'],
+        swapTokensId: [97],
     },
     97: {
         name: 'tBSC',
@@ -219,5 +228,6 @@ export const chains: {
         tokenAddress: '0xC13e06C53DC417C39e9a7fEfa60a6eE31afaB814',
         id: 97,
         swapTokens: ['sETH'],
+        swapTokensId: [11155111],
     },
 }
