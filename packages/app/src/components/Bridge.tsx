@@ -10,14 +10,17 @@ import { TokenBalance } from '@/components/TokenBalance'
 import { chains } from '../contracts'
 import { parseAbi, parseEther } from 'viem'
 import { Connect } from '@/components/Connect'
-import { createCookie } from '../app/actions'
+import useLocalStorage from '@/app/hooks/useLocalStorage'
+
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
+
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
+  const [value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`, '')
 
   async function handleSendTransaction(event: FormEvent) {
     event.preventDefault()
@@ -36,13 +39,13 @@ export function Bridge() {
   }
 
   useEffect(() => {
-    const tokenSwap = chain?.id && chains[chain?.id].swapTokens[0];
     if (txSuccess) {
       Add(`Transaction successful`, {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
-      address && tokenSwap && createCookie(tokenSwap, amount, address)
+      // setValue(`${amount}, ${address}, ${hash}`)
+      setValue(amount, address, hash)
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
@@ -90,7 +93,7 @@ export function Bridge() {
         <button
           className='mt-2 mb-8 w-full items-center mx-auto justify-items-center rounded-full border border-transparent bg-lime-500 px-4 py-4 text-base font-medium text-blue-900 shadow-sm hover:bg-lime-400 focus:outline-none disabled:hover:bg-lime-500 disabled:opacity-10'
           onClick={handleSendTransaction}
-          disabled={!address || amount === ''}>
+          disabled={!address || Number(amount) < 0.01}>
           {isPending || isLoading ? (
             <span className='loading loading-dots loading-sm'></span>
           ) : (

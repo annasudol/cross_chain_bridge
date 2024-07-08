@@ -212,6 +212,7 @@ export const chains: {
         id: number
         swapTokens: string[]
         swapTokensId: number[]
+        etherscan: string;
     }
 } = {
     11155111: {
@@ -221,6 +222,7 @@ export const chains: {
         id: 11155111,
         swapTokens: ['tBSC'],
         swapTokensId: [97],
+        etherscan: 'https://sepolia.etherscan.io/'
     },
     97: {
         name: 'tBSC',
@@ -229,5 +231,6 @@ export const chains: {
         id: 97,
         swapTokens: ['sETH'],
         swapTokensId: [11155111],
+        etherscan: 'https://testnet.bscscan.com/'
     },
 }
