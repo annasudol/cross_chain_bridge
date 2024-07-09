@@ -4,7 +4,6 @@ import { Bridge } from '@/components/Bridge'
 import { Facet } from '@/components/Facet'
 import { Redeem } from '@/components/Redeem'
 
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }

@@ -33,7 +33,6 @@ export function Redeem() {
                 key={hash}
                 amount={amount}
                 address={address}
-                hash={hash}
                 chainId={chain?.id || 97}
                 token={chains[chain?.id || 97].name}
               />
