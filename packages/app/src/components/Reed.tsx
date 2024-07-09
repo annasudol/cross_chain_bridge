@@ -3,34 +3,47 @@
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useEffect, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
-import { TokenQuantityInput } from '@/components/TokenQuantityInput'
-import { TokenName } from '@/components/TokenName'
-import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
-import { TokenBalance } from '@/components/TokenBalance'
+
 import { chains } from '../contracts'
-import { parseAbi, parseEther } from 'viem'
+import { Address, parseAbi, parseEther, parseUnits } from 'viem'
 import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
+import { signMessage } from '@/utils/helpers/signMessage'
 
-export function Bridge() {
-  const [amount, setAmount] = useState('0.01')
-
+export function Reed() {
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
-  const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
   const [_value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
-
-  async function handleSendTransaction() {
-    if (chain && address) {
-      writeContract({
-        address: chains[chain?.id].bridgeAddress,
-        abi: parseAbi(['function swap(address to, uint256 amount, uint256 chainId, string symbol)']),
-        functionName: 'swap',
-        args: [address, parseEther(amount), BigInt(chains[chain?.id].id), chains[chain?.id].name],
-      })
+  const [value] = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
+  async function handleSendTransaction(e: any) {
+    e.preventDefault()
+    if (address && chain?.id) {
+      const messageHash = await signMessage(address, address, value[0].amount, chain?.id, chains[chain?.id].name)
+      console.log(address, address, value[0].amount, chain?.id, chains[chain?.id].name, 'messageHash')
+      if (messageHash) {
+        writeContract({
+          address: '0x551312645f3112A65394247078E7709fD40CfE05',
+          abi: parseAbi([
+            'function redeem(address from, address to, uint256 amount, uint256 _chainId, string memory symbol, bytes calldata signature)',
+          ]),
+          functionName: 'redeem',
+          args: [
+            address,
+            address,
+            parseEther(value[0].amount),
+            BigInt(chains[chain?.id].id),
+            chains[chain?.id].name,
+            messageHash as any,
+          ],
+        })
+      } else {
+        Add(`Unknown chain ID or an address`, {
+          type: 'error',
+        })
+      }
     } else {
       Add(`Unknown chain ID or an address`, {
         type: 'error',
@@ -44,13 +57,16 @@ export function Bridge() {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
-      const token = chain?.id && chains[chain?.id].swapTokens[0]
-      setValue(amount, address, hash)
+      //   const token = chain?.id && chains[chain?.id].swapTokens[0]
+      //   setValue(amount, address, hash)
     } else if (txError) {
+        console.log(txError, 'txError')
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
       })
     } else if (error) {
+                console.log(error.message, 'error')
+
       Add(`Transaction failed: ${error.message}`, {
         type: 'error',
       })
@@ -70,34 +86,21 @@ export function Bridge() {
   }
   return (
     <div className='p-6'>
-      <SwitchNetworkBtn />
-      <div className='py-2 pl-1'>
-        {address && chain?.id && (
-          <p>
-            Your balance:{' '}
-            <TokenBalance
-              setBalance={setBalance}
-              balance={balance}
-              address={address}
-              tokenAddress={chains[chain?.id].tokenAddress}
-            />
-            <span className='text-white mx-2'>{chains[chain?.id as number]?.name} </span>
-          </p>
-        )}
-      </div>
-      <div className='flex flex-col m-2'>
-        <label className='form-control w-full'>
-          <div className='label'>{chain?.id && <TokenName chainId={chain?.id} />}</div>
-          <TokenQuantityInput onChange={setAmount} quantity={amount} maxValue={balance} />
-        </label>
+      {value &&
+        value.length &&
+        value.map((v: any) => (
+          <button key={v.hash} onClick={handleSendTransaction}>
+            Redeem {v.amount} {chains[chain?.id as number]?.name}
+          </button>
+        ))}
+      {/* <div className='flex flex-col m-2'>
         <ButtonSubmit
           onClick={handleSendTransaction}
           disabled={!address || Number(amount) < 0.01}
           isLoading={isPending || isLoading}>
-          Swap {amount} {chains[chain?.id as number]?.name} to{' '}
-          {chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}
+          Redeem {amount} {chains[chain?.id as number]?.name}
         </ButtonSubmit>
-      </div>
+      </div> */}
     </div>
   )
 }

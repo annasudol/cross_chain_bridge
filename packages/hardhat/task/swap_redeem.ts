@@ -32,7 +32,7 @@ task('swapETH', 'swap tokens from Ethereum to Binance')
       tx_swap.wait()
       if (tx_swap?.hash) {
         console.log(`swapped successfully from Ethereum to Binance, tx.id ${tx_swap.hash}`)
-        const messageHash = await signMessage(acc0.address, to, value, chainID_BSC, tBSC, validator);
+        const messageHash = await signMessage(acc0.address, to, value, chainID_BSC, tBSC, validator)
 
         //from, to, amount, chainId, symbol
         balance = await eth_token.balanceOf(acc0.address)

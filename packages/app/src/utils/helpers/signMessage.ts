@@ -1,14 +1,16 @@
 /* eslint-disable prettier/prettier */
 'use client'
 import { ethers } from 'ethers'
-import { parseUnits } from 'viem'
-const phrase = process.env.MNEMONIC;
-export async function signMessage(from: string, to: string, value: number, chainId: number, symbol: string) {
+import { parseEther } from 'viem'
+const phrase = 'fashion tomorrow brand seek drink quiz beauty tray allow gold symptom boat'
+
+export async function signMessage(from: string, to: string, value: string, chainId: number, symbol: string) {
     if (phrase) {
+
         const messageHash = ethers.utils.solidityKeccak256(
             ['address', 'address', 'uint256', 'uint256', 'string'],
-            [from, to, parseUnits(value.toString(), 9), parseUnits(chainId.toString(), 9), symbol]
-        )
+            [from, to, parseEther(value), BigInt(chainId), symbol]
+        );
 
         const w = ethers.Wallet.fromMnemonic(phrase);
         const rawSignature = w.signMessage(messageHash)

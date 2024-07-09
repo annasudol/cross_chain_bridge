@@ -10,7 +10,7 @@ export function Redeem() {
   const { address, chain } = useAccount()
 
   const [value] = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
-=  if (!address) {
+  if (!address) {
     return (
       <div className='flex justify-center items-center w-full h-full'>
         <div className='text-center flex flex-col items-center'>

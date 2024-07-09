@@ -3,7 +3,7 @@ import { ChainIcon } from '@/components/ChainIcon'
 interface ISwitchNetworkBtn {
   label?: string
 }
-export const SwitchNetworkBtn = ({label}: ISwitchNetworkBtn) => {
+export const SwitchNetworkBtn = ({ label }: ISwitchNetworkBtn) => {
   return (
     <ConnectButton.Custom>
       {function ({ account, chain, openChainModal, authenticationStatus, mounted }) {
@@ -25,7 +25,7 @@ export const SwitchNetworkBtn = ({label}: ISwitchNetworkBtn) => {
               if (connected) {
                 return (
                   <div className='flex max-w-max items-center justify-start'>
-                    {label &&<span className='mx-1 text-lg text-white'>{label}</span>}
+                    {label && <span className='mx-1 text-lg text-white'>{label}</span>}
                     <button
                       onClick={openChainModal}
                       disabled={!connected || chain?.unsupported}

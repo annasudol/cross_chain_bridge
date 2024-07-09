@@ -3,7 +3,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagm
 import { useEffect, type FC } from 'react'
 import { useNotifications } from '@/context/Notifications'
 import { chains } from '../contracts'
-import { Address, parseAbi, parseEther } from 'viem'
+import { Address, parseAbi, parseEther, toBytes } from 'viem'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import { signMessage } from '@/utils/helpers/signMessage'
 interface RedeemBtnProps {
@@ -18,23 +18,31 @@ export const RedeemItem: FC<RedeemBtnProps> = ({ token, amount, chainId, address
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
 
-  async function handleClick() {
+  const handleClick = async () => {
     const messageHash = await signMessage(address, address, Number(amount), chainId, token)
     console.log(messageHash)
-    // if (chain && address) {
-    //   writeContract({
-    //     address: chains[chain?.id].bridgeAddress,
-    //     abi: parseAbi([
-    //       'function redeem(address from, address to, uint256 amount, uint256 _chainId, string symbol, bytes signature)',
-    //     ]),
-    //     functionName: 'redeem',
-    //     args: [address, address, parseEther(amount), BigInt(chains[chain?.id].id), chains[chain?.id].name],
-    //   })
-    // } else {
-    //   Add(`Unknown chain ID or an address`, {
-    //     type: 'error',
-    //   })
-    // }
+
+    if (messageHash) {
+      writeContract({
+        address: chains[chainId].bridgeAddress,
+        abi: parseAbi([
+          'function redeem(address from, address to, uint256 amount, uint256 _chainId, string memory symbol, bytes memory signature)',
+        ]),
+        functionName: 'redeem',
+        args: [
+          address,
+          address,
+          parseEther(amount),
+          BigInt(chains[chainId].id),
+          chains[chainId].name,
+          `0x${messageHash}`,
+        ],
+      })
+    } else {
+      Add(`Unknown chain ID or an address`, {
+        type: 'error',
+      })
+    }
   }
 
   // useEffect(() => {
