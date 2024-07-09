@@ -39,7 +39,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       sepolia: '5EGDKRK2EZMDBXPAMVMT7XCISNEZ9HVIEZ',
-      bscTestnet: BSCSCAN_API_KEY,
+      bscTestnet: 'GZDK5QCSFPIHDXYV952M7I91AIPCI9YWFT'
     },
   },
 }

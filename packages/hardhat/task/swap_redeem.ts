@@ -9,7 +9,7 @@ dotenv.config()
 const TOKEN_sETH_ADDRESS: string = process.env.TOKEN_sETH_ADDRESS!
 const TOKEN_BSC_ADDRESS: string = process.env.TOKEN_tBSC_ADDRESS!
 const BRIDGE_ETH_ADDRESS: string = process.env.BRIDGE_sETH_Address!
-const BRIDGE_BSC_ADDRESS: string = process.env.bridgetBSC_Address!
+const BRIDGE_BSC_ADDRESS: string = process.env.BRIDGE_tBSC_Address!
 const chainID_ETH = 11155111
 const chainID_BSC = 97
 const eETH = 'sETH'
@@ -34,7 +34,7 @@ task('swapETH', 'swap tokens from Ethereum to Binance')
         console.log(`swapped successfully from Ethereum to Binance, tx.id ${tx_swap.hash}`)
         const messageHash = await signMessage(acc0.address, to, value, chainID_BSC, tBSC, validator);
 
-          //from, to, amount, chainId, symbol
+        //from, to, amount, chainId, symbol
         balance = await eth_token.balanceOf(acc0.address)
         console.log(`Balance of giver is ${hre.ethers.utils.formatEther(balance)} eETH`)
         console.log(
@@ -82,6 +82,7 @@ task('swapBSC', 'swap tokens from Binance to Ethereum')
 
       const { value, to } = taskArgs
       const [acc0, validator] = await hre.ethers.getSigners()
+      console.log(validator, 'validator')
       let balance = await bEth_token.balanceOf(acc0.address)
       console.log(`Started Swapped to ${to}. Balance of giver is ${hre.ethers.utils.formatEther(balance)} bETH`)
       const tx_swap = await bridgeBSC.swap(to, value, chainID_BSC, tBSC)

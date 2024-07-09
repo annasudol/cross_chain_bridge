@@ -5,23 +5,23 @@ import { useNotifications } from '@/context/Notifications'
 import { chains } from '../contracts'
 import { Address, parseAbi, parseEther } from 'viem'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
-
+import { signMessage } from '@/utils/helpers/signMessage'
 interface RedeemBtnProps {
   token: string
   amount: string
   chainId: number
-  address: Address;
+  address: Address
 }
 
-export const RedeemItem: FC<RedeemBtnProps> = ({ token, amount, chainId }) => {
-
+export const RedeemItem: FC<RedeemBtnProps> = ({ token, amount, chainId, address }) => {
   const { Add } = useNotifications()
-  const { address, chain } = useAccount()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
 
   async function handleClick() {
-    if (chain && address) {
+    const messageHash = await signMessage(address, address, Number(amount), chainId, token)
+    console.log(messageHash)
+    // if (chain && address) {
     //   writeContract({
     //     address: chains[chain?.id].bridgeAddress,
     //     abi: parseAbi([
@@ -36,28 +36,26 @@ export const RedeemItem: FC<RedeemBtnProps> = ({ token, amount, chainId }) => {
     //   })
     // }
   }
-}
 
-  useEffect(() => {
-    if (txSuccess) {
-      Add(`Transaction successful`, {
-        type: 'success',
-        href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
-      })
-      const token = chain?.id && chains[chain?.id].swapTokens[0]
-      setValue(amount, address, hash)
-    } else if (txError) {
-      Add(`Transaction failed: ${txError.cause}`, {
-        type: 'error',
-      })
-    } else if (error) {
-      Add(`Transaction failed: ${error.message}`, {
-        type: 'error',
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txSuccess, txError, error])
-
+  // useEffect(() => {
+  //   if (txSuccess) {
+  //     Add(`Transaction successful`, {
+  //       type: 'success',
+  //       href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
+  //     })
+  //     const token = chain?.id && chains[chain?.id].swapTokens[0]
+  //     setValue(amount, address, hash)
+  //   } else if (txError) {
+  //     Add(`Transaction failed: ${txError.cause}`, {
+  //       type: 'error',
+  //     })
+  //   } else if (error) {
+  //     Add(`Transaction failed: ${error.message}`, {
+  //       type: 'error',
+  //     })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [txSuccess, txError, error])
 
   return (
     <ButtonSubmit onClick={handleClick}>
