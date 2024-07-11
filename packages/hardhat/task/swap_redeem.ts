@@ -4,39 +4,40 @@ import '@nomiclabs/hardhat-ethers'
 import '@typechain/hardhat'
 import * as dotenv from 'dotenv'
 import signMessage from '../utils/signMessage'
+import { ethers } from 'hardhat'
 
 dotenv.config()
-const TOKEN_sETH_ADDRESS: string = process.env.TOKEN_sETH_ADDRESS!
+const TOKEN_ETH_ADDRESS: string = process.env.TOKEN_sETH_ADDRESS!
 const TOKEN_BSC_ADDRESS: string = process.env.TOKEN_tBSC_ADDRESS!
 const BRIDGE_ETH_ADDRESS: string = process.env.BRIDGE_sETH_Address!
-const BRIDGE_BSC_ADDRESS: string = process.env.BRIDGE_tBSC_Address!
+const BRIDGE_BSC_ADDRESS: string = process.env.BRIDGE_BSC_Address!
+
 const chainID_ETH = 11155111
 const chainID_BSC = 97
 const eETH = 'sETH'
-const tBSC = 'tBSC'
+const bETH = 'tBSC'
 
-//eg. npx hardhat swapETH --to 0xd06ffA953497355eEce263007D88966Ef888b21F --value 1 --network sepolia
+//eg. npx hardhat swapETH --to 0xd67674d605e4aF65B809A0d045eCa5781E7c48cF --value 100000000000 --network sepolia
 task('swapETH', 'swap tokens from Ethereum to Binance')
   .addParam('to', 'address to swap')
   .addParam('value', 'add value ETh to swap to Binance')
   .setAction(async (taskArgs, hre) => {
     try {
       const bridgeEth = await hre.ethers.getContractAt('Bridge', BRIDGE_ETH_ADDRESS)
-      const eth_token = await hre.ethers.getContractAt('Token', TOKEN_sETH_ADDRESS)
+      const eth_token = await hre.ethers.getContractAt('Token', TOKEN_ETH_ADDRESS)
 
       const { value, to } = taskArgs
       const [acc0, validator] = await hre.ethers.getSigners()
       let balance = await eth_token.balanceOf(acc0.address)
-      console.log(`Started Swapped to ${to}. Balance of giver is ${hre.ethers.utils.formatEther(balance)} eETH`)
-      const tx_swap = await bridgeEth.swap(to, value, chainID_ETH, eETH)
+      console.log(acc0.address, 'acc0.address')
+      console.log(`Started Swapped to ${to}. Balance of giver is ${hre.ethers.utils.formatEther(balance)} ${eETH}`)
+      const tx_swap = await bridgeEth.swap(to, value, 0, chainID_ETH, eETH)
       tx_swap.wait()
       if (tx_swap?.hash) {
         console.log(`swapped successfully from Ethereum to Binance, tx.id ${tx_swap.hash}`)
-        const messageHash = await signMessage(acc0.address, to, value, chainID_BSC, tBSC, validator)
-
-        //from, to, amount, chainId, symbol
+        const messageHash = await signMessage(acc0.address, to, value, chainID_BSC, bETH, validator)
         balance = await eth_token.balanceOf(acc0.address)
-        console.log(`Balance of giver is ${hre.ethers.utils.formatEther(balance)} eETH`)
+        console.log(`Balance of giver is ${hre.ethers.utils.formatEther(balance)} ${eETH}`)
         console.log(
           `Run: npx hardhat redeemBSC --to ${to} --value ${value} --signature ${messageHash} --network bscTestnet`
         )
@@ -53,16 +54,16 @@ task('redeemBSC', 'approve swapped tokens from Ethereum to Binance')
   .setAction(async (taskArgs, hre) => {
     try {
       const bridgeBSC = await hre.ethers.getContractAt('Bridge', BRIDGE_BSC_ADDRESS)
-      const BSC_token = await hre.ethers.getContractAt('Token', TOKEN_BSC_ADDRESS)
+      const bEth_token = await hre.ethers.getContractAt('Token', TOKEN_BSC_ADDRESS)
 
       const { value, to, signature } = taskArgs
       const [acc0] = await hre.ethers.getSigners()
 
-      let balance = await BSC_token.balanceOf(to)
-      console.log(`Started Redeemed to ${to}. Balance of receiver ${hre.ethers.utils.formatEther(balance)} ${tBSC}`)
-      const tx_redeem = await bridgeBSC.redeem(acc0.address, to, value, chainID_BSC, tBSC, signature)
+      let balance = await bEth_token.balanceOf(to)
+      console.log(`Started Redeemed to ${to}. Balance of receiver ${hre.ethers.utils.formatEther(balance)} bETH`)
+      const tx_redeem = await bridgeBSC.redeem(acc0.address, to, value, 0, chainID_BSC, bETH, signature)
       if (tx_redeem.hash) {
-        balance = await BSC_token.balanceOf(to)
+        balance = await bEth_token.balanceOf(to)
         console.log(`Redeem successfully to Ethereum to Binance, tx.id ${tx_redeem.hash}`)
         console.log(`Balance of Receiver after redeem is ${balance} bETH`)
       }
@@ -71,29 +72,28 @@ task('redeemBSC', 'approve swapped tokens from Ethereum to Binance')
     }
   })
 
-//eg. npx hardhat swapBSC --to 0x80dD5aD6B8775c4E31C999cA278Ef4D035717872 --value 10000000000 --network bsctestnet
+//eg. npx hardhat swapBSC --to 0xd67674d605e4aF65B809A0d045eCa5781E7c48cF --value 1000000 --network bscTestnet
 task('swapBSC', 'swap tokens from Binance to Ethereum')
   .addParam('to', 'address to swap')
   .addParam('value', 'add value ETh to swap to Binance')
   .setAction(async (taskArgs, hre) => {
     try {
       const bridgeBSC = await hre.ethers.getContractAt('Bridge', BRIDGE_BSC_ADDRESS)
-      const bEth_token = await hre.ethers.getContractAt('BridgeERC20', TOKEN_BSC_ADDRESS)
+      const bEth_token = await hre.ethers.getContractAt('Token', TOKEN_BSC_ADDRESS)
 
       const { value, to } = taskArgs
       const [acc0, validator] = await hre.ethers.getSigners()
-      console.log(validator, 'validator')
       let balance = await bEth_token.balanceOf(acc0.address)
-      console.log(`Started Swapped to ${to}. Balance of giver is ${hre.ethers.utils.formatEther(balance)} bETH`)
-      const tx_swap = await bridgeBSC.swap(to, value, chainID_BSC, tBSC)
+      console.log(`Started Swapped to ${to}. Balance of giver is ${hre.ethers.utils.formatEther(balance)} ${bETH}`)
+      const tx_swap = await bridgeBSC.swap(to, value, 0, chainID_BSC, bETH)
       tx_swap.wait()
       if (tx_swap?.hash) {
         console.log(`swapped successfully from Ethereum to Binance, tx.id ${tx_swap.hash}`)
         const messageHash = await signMessage(acc0.address, to, value, chainID_ETH, eETH, validator)
 
-        console.log(`Balance of giver is ${hre.ethers.utils.formatEther(balance)} tBSC`)
+        console.log(`Balance of giver is ${hre.ethers.utils.formatEther(balance)} bETH`)
         console.log(
-          `Run: npx hardhat redeemETH --to ${to} --value ${value} --signature ${messageHash} --network goerli`
+          `Run: npx hardhat redeemETH --to ${to} --value ${value} --signature ${messageHash} --network sepolia`
         )
       }
     } catch (err: any) {
@@ -108,14 +108,14 @@ task('redeemETH', 'approve swapped tokens form Binance to Ethereum')
   .setAction(async (taskArgs, hre) => {
     try {
       const bridgeEth = await hre.ethers.getContractAt('Bridge', BRIDGE_ETH_ADDRESS)
-      const eth_token = await hre.ethers.getContractAt('BridgeERC20', TOKEN_sETH_ADDRESS)
+      const eth_token = await hre.ethers.getContractAt('Token', TOKEN_ETH_ADDRESS)
 
       const { value, to, signature } = taskArgs
       const [acc0] = await hre.ethers.getSigners()
 
       let balance = await eth_token.balanceOf(to)
       console.log(`Started Redeemed to ${to}. Balance of receiver ${hre.ethers.utils.formatEther(balance)} eETH`)
-      const tx_redeem = await bridgeEth.redeem(acc0.address, to, value, chainID_ETH, eETH, signature)
+      const tx_redeem = await bridgeEth.redeem(acc0.address, to, value, 0, chainID_ETH, eETH, signature)
       if (tx_redeem.hash) {
         balance = await eth_token.balanceOf(to)
         console.log(`Redeem successfully to Ethereum from Binance, tx.id ${tx_redeem.hash}`)

@@ -15,6 +15,7 @@ task('grantRole', 'give authorized role to Bridge')
   .setAction(async (taskArgs, hre) => {
     try {
       const { bridge, token } = taskArgs
+      console.log(AUTHORIZED_ROLE, 'AUTHORIZED_ROLE')
       const token_ = await hre.ethers.getContractAt('Token', token)
       let tx = await token_.grantRole(AUTHORIZED_ROLE, bridge)
       tx.wait()

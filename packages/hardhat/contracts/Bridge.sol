@@ -12,8 +12,8 @@ contract Bridge {
     mapping(bytes32 => bool) redemeed;
     mapping(address => uint) faceded;
                           //from: string, to: string, value: number, chainId: number, symbol: string
-    event SwapInitialized(address from, address to, uint256 amount, uint256 chainId, string symbol);
-    event RedeemInitialized(address from, address to, uint256 amount, uint256 chainId, string symbol);
+    event SwapInitialized(address from, address to, uint256 amount, uint256 nonce, uint256 chainId, string symbol);
+    event RedeemInitialized(address from, address to, uint256 amount, uint256 nonce, uint256 chainId, string symbol);
 
     constructor(address _validator, address _token, uint256 _chainID) {
         validator = _validator;
@@ -40,33 +40,25 @@ contract Bridge {
         Token(token).mint(msg.sender, 1 ether);
     }
 
-    function deposit(uint256 amount) public {
-        Token(token).mint(msg.sender, amount);
-    }
-
-    function withdraw(uint256 amount) public {
-        Token(token).burn(msg.sender, amount);
-    }
-
     //Swap(): transfers tokens from sender to the contract
-    function swap(address to, uint256 amount, uint256 chainId, string memory symbol)
+    function swap(address to, uint256 amount, uint256 nonce, uint256 chainId, string memory symbol)
         checkValidERC20(symbol) chainIdIsSupported(chainId) public {
             Token(token).burn(msg.sender, amount);
-            emit SwapInitialized(msg.sender, to, amount, chainId, symbol);
+            emit SwapInitialized(msg.sender, to, amount, nonce, chainId, symbol);
     }
 
     // takes hashed message and a signature, calls ecrecover to recover the signer and verifies 
     //if the recovered address is the validator address; if yes, transfers tokens to the receiver.
-    function redeem(address from, address to, uint256 amount, uint256 _chainId, string memory symbol, bytes calldata signature)
+    function redeem(address from, address to, uint256 amount, uint256 nonce, uint256 _chainId, string memory symbol, bytes calldata signature)
         checkValidERC20(symbol) chainIdIsSupported(_chainId) public {
 
-        bytes32 message = keccak256(abi.encodePacked(from, to, amount, _chainId, symbol));
+        bytes32 message = keccak256(abi.encodePacked(from, to, amount, nonce, _chainId, symbol));
         require(!redemeed[message], "re-entrance");
         require(_verify(message, signature), "invalid signature");
         redemeed[message]=true;
 
         Token(token).mint(to, amount);
-        emit RedeemInitialized(from, to, amount, _chainId, symbol);
+        emit RedeemInitialized(from, to, amount, nonce, _chainId, symbol);
     }
 
     function _verify(bytes32 message, bytes calldata signature) internal view returns (bool) {
