@@ -27,9 +27,11 @@ export function Bridge() {
     if (chain && address) {
       writeContract({
         address: chains[chain?.id].bridgeAddress,
-        abi: parseAbi(['function swap(address to, uint256 amount, uint256 chainId, string symbol)']),
+        abi: parseAbi([
+          'function swap(address to, uint256 amount, uint256 nonce, uint256 chainId, string memory symbol)',
+        ]),
         functionName: 'swap',
-        args: [address, parseEther(amount), BigInt(chains[chain?.id].id), chains[chain?.id].name],
+        args: [address, parseEther(amount), BigInt(0), BigInt(chains[chain?.id].id), chains[chain?.id].name],
       })
     } else {
       Add(`Unknown chain ID or an address`, {
@@ -44,7 +46,6 @@ export function Bridge() {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
-      const token = chain?.id && chains[chain?.id].swapTokens[0]
       setValue(amount, address, hash)
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {

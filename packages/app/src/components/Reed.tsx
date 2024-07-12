@@ -18,22 +18,27 @@ export function Reed() {
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
   const [_value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
   const [value] = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
-  async function handleSendTransaction(e: any) {
-    e.preventDefault()
+  async function handleSendTransaction() {
     if (address && chain?.id) {
-      const messageHash = await signMessage(address, address, value[0].amount, chain?.id, chains[chain?.id].name)
-      console.log(address, address, value[0].amount, chain?.id, chains[chain?.id].name, 'messageHash')
+      const messageHash = await signMessage(
+        address,
+        address,
+        parseEther(value[0].amount),
+        BigInt(chain?.id),
+        chains[chain?.id].name
+      )
       if (messageHash) {
         writeContract({
-          address: '0x551312645f3112A65394247078E7709fD40CfE05',
+          address: chains[chain?.id].bridgeAddress,
           abi: parseAbi([
-            'function redeem(address from, address to, uint256 amount, uint256 _chainId, string memory symbol, bytes calldata signature)',
+            'function redeem(address from, address to, uint256 amount, uint256 nonce, uint256 _chainId, string memory symbol, bytes calldata signature)',
           ]),
           functionName: 'redeem',
           args: [
             address,
             address,
             parseEther(value[0].amount),
+            BigInt(0),
             BigInt(chains[chain?.id].id),
             chains[chain?.id].name,
             messageHash as any,
@@ -60,12 +65,12 @@ export function Reed() {
       //   const token = chain?.id && chains[chain?.id].swapTokens[0]
       //   setValue(amount, address, hash)
     } else if (txError) {
-        console.log(txError, 'txError')
+      console.log(txError, 'txError')
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
       })
     } else if (error) {
-                console.log(error.message, 'error')
+      console.log(error.message, 'error')
 
       Add(`Transaction failed: ${error.message}`, {
         type: 'error',
@@ -89,9 +94,9 @@ export function Reed() {
       {value &&
         value.length &&
         value.map((v: any) => (
-          <button key={v.hash} onClick={handleSendTransaction}>
+          <ButtonSubmit key={v.hash} onClick={handleSendTransaction}>
             Redeem {v.amount} {chains[chain?.id as number]?.name}
-          </button>
+          </ButtonSubmit>
         ))}
       {/* <div className='flex flex-col m-2'>
         <ButtonSubmit

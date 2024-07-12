@@ -1,4 +1,4 @@
-import { chains } from "@/contracts"
+import { chains } from '@/contracts'
 
 interface TokenNameProps {
   chainId?: number

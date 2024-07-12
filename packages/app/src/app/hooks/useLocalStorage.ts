@@ -17,9 +17,14 @@ const useLocalStorage = (key: string) => {
         }
     })
     const setValue = (amount: string, address: Address, hash: Hash) => {
+        let valueToStore = {};
         try {
-            const valueToStore = [...state, { amount, address, hash }];
-            window.localStorage.setItem(key, JSON.stringify(valueToStore))
+            if (Object.keys(state).length > 0) {
+                valueToStore = [...state, { amount, address, hash }];
+            } else {
+                valueToStore = [{ amount, address, hash }];
+            }
+            window.localStorage.setItem(key, JSON.stringify(valueToStore));
             setState(valueToStore)
         } catch (error) {
             console.log(error)
