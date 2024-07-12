@@ -2,7 +2,7 @@
 import { Tab } from '@headlessui/react'
 import { Bridge } from '@/components/Bridge'
 import { Facet } from '@/components/Facet'
-import { Reed } from '@/components/Reed'
+import { Redeem } from '@/components/Redeem'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -30,7 +30,7 @@ export const Tabs = () => {
         <Tab.Panels className='mt-2'>
           {categories.map((cat, idx) => (
             <Tab.Panel key={idx} className='rounded-xl p-3 h-96 max-w-xl bg-indigo-950 focus:outline-none'>
-              {cat === 'Bridge' ? <Bridge /> : cat === 'Facet' ? <Facet /> : <Reed />}
+              {cat === 'Bridge' ? <Bridge /> : cat === 'Facet' ? <Facet /> : <Redeem />}
             </Tab.Panel>
           ))}
         </Tab.Panels>

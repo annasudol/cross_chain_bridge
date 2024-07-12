@@ -2,11 +2,10 @@
 'use client'
 import { ethers } from 'ethers'
 import { Address } from 'viem';
-const phrase = 'fashion tomorrow brand seek drink quiz beauty tray allow gold symptom boat'
+const phrase = process.env.MNEMONIC
 
 export async function signMessage(from: Address, to: Address, value: BigInt, chainId: BigInt, symbol: string) {
     if (phrase) {
-
         const messageHash = ethers.utils.solidityKeccak256(
             ['address', 'address', 'uint256', 'uint256', 'uint256', 'string'],
             [from, to, value, BigInt(0), chainId, symbol]
