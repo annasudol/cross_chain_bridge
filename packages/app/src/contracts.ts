@@ -1,5 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Address } from 'viem'
+const TOKEN_tBSC_ADDRESS = process.env.TOKEN_tBSC_ADDRESS || '0xf097BC82bbAF699fb99796aabeB0e1649F279715'
+const BRIDGE_BSC_Address = process.env.BRIDGE_BSC_Address || '0x2D5a4AEa4c2B6d34da76f23e062051F1656B428a'
+const TOKEN_sETH_ADDRESS = process.env.TOKEN_sETH_ADDRESS || '0x86B6b5B004F4cBEbA4Abde77a7D2f8E9f73B39f5'
+const BRIDGE_sETH_Address = process.env.BRIDGE_sETH_Address || '0xED3649735e62a82C8121e2650A9C2177ddb6155F'
 
 export const wagmiContractConfig = {
     address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
@@ -217,8 +221,8 @@ export const chains: {
 } = {
     11155111: {
         name: 'sETH',
-        bridgeAddress: '0x551312645f3112A65394247078E7709fD40CfE05',
-        tokenAddress: '0x640590C4F3d31e0614D550BA3bbf1eF414608763',
+        bridgeAddress: BRIDGE_sETH_Address as Address,
+        tokenAddress: TOKEN_sETH_ADDRESS as Address,
         id: 11155111,
         swapTokens: ['tBSC'],
         swapTokensId: [97],
@@ -226,8 +230,8 @@ export const chains: {
     },
     97: {
         name: 'tBSC',
-        bridgeAddress: '0xF5F65b8e87c48C475755F7D3e23Ab8fB7f71F923',
-        tokenAddress: '0xC13e06C53DC417C39e9a7fEfa60a6eE31afaB814',
+        bridgeAddress: BRIDGE_BSC_Address as Address,
+        tokenAddress: TOKEN_tBSC_ADDRESS as Address,
         id: 97,
         swapTokens: ['sETH'],
         swapTokensId: [11155111],
