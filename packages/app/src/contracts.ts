@@ -11,8 +11,10 @@ export const chains: {
         bridgeAddress: Address
         tokenAddress: Address
         id: number
-        swapTokens: string[]
-        swapTokensId: number[]
+        swapTokens: string[];
+        swapChains: string[]
+        swapTokensId: number[],
+        swapTokensChains: string[]
         etherscan: string;
     }
 } = {
@@ -23,6 +25,7 @@ export const chains: {
         id: 11155111,
         swapTokens: ['tBSC'],
         swapTokensId: [97],
+        swapTokensChains: ['Bscscan'],
         etherscan: 'https://sepolia.etherscan.io/'
     },
     97: {
@@ -32,6 +35,7 @@ export const chains: {
         id: 97,
         swapTokens: ['sETH'],
         swapTokensId: [11155111],
-        etherscan: 'https://testnet.bscscan.com/'
+        etherscan: 'https://testnet.bscscan.com/',
+        swapTokensChains: ['sepolia']
     },
 }

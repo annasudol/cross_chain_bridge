@@ -12,7 +12,6 @@ import { parseAbi, parseEther } from 'viem'
 import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
-import { ModalUI } from '@/components/ModalUI'
 import { useChainModal } from '@rainbow-me/rainbowkit'
 
 export function Bridge() {
@@ -27,7 +26,10 @@ export function Bridge() {
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
   const { setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
-
+  const handleClick = () => {
+    openChainModal && openChainModal()
+    setSwapTxIsSuccess(false)
+  }
   async function handleSendTransaction() {
     if (chain && address) {
       writeContract({
@@ -93,12 +95,19 @@ export function Bridge() {
         )}
       </div>
       {swapTxIsSuccess ? (
-        <ButtonSubmit onClick={() => openChainModal && openChainModal()}>click to change network</ButtonSubmit>
+        <ButtonSubmit onClick={handleClick}>
+          click to change network to {chains[chain?.id || 97].swapTokensChains[0]}
+        </ButtonSubmit>
       ) : (
         <div className='m-2'>
           <div className='form-control w-full'>
-            <div className='label'>{chain?.id && <TokenName chainId={chain?.id} />}</div>
-            <TokenQuantityInput onChange={setAmount} quantity={amount} maxValue={balance} />
+            <div>{chain?.id && <TokenName chainId={chain?.id} />}</div>
+            <TokenQuantityInput
+              onChange={setAmount}
+              quantity={amount}
+              maxValue={balance}
+              disabled={isPending || isLoading}
+            />
           </div>
 
           <ButtonSubmit

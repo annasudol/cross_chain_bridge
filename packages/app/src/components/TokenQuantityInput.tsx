@@ -6,12 +6,14 @@ interface TokenQuantityInputProps {
   quantity: string
   maxValue?: string
   displayMaxClearButtons?: boolean
+  disabled?: boolean
 }
 export function TokenQuantityInput({
   onChange,
   quantity,
   maxValue,
   displayMaxClearButtons = true,
+  disabled = false,
 }: TokenQuantityInputProps) {
   const [amount, setAmount] = useState('0.00')
 
@@ -49,6 +51,7 @@ export function TokenQuantityInput({
         className='w-[100%] rounded-md bg-gray-600 bg-opacity-20 px-4 py-3 text-base text-white outline-none'
         pattern='^-?[0-9]\d*\.?\d*$'
         onChange={(e) => handleChange(e)}
+        disabled={disabled}
       />
 
       <div className={`${displayMaxClearButtons ? 'flex' : 'hidden'}  flex-row gap-2 w-full`}>

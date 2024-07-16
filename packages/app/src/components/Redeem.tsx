@@ -10,12 +10,13 @@ import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import { IStorage } from '@/utils/types'
+import { Loading } from './Loading'
 
 export function Redeem() {
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
   const { data: hash, error, writeContract } = useWriteContract()
-  const { error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
+  const { isPending, isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
   const { state, setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
   const [txRedeemed, setTxRedeemed] = useState<IStorage>();
 
@@ -86,6 +87,9 @@ export function Redeem() {
         <p className='text-center text-white'>No transactions to redeem</p>
       </div>
     )
+  if (isLoading) {
+    return <Loading message='Waiting to complete Redeem transaction' />
+  }
 
   return <div className='py-4 px-2'>{redeemBtn}</div>
 }
