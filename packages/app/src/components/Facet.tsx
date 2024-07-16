@@ -33,6 +33,7 @@ export function Facet() {
 
   useEffect(() => {
     if (txSuccess) {
+      setBalance(() => (Number(balance) + 1).toString())
       Add(`Transaction successful`, {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,

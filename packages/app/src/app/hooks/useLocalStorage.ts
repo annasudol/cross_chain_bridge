@@ -4,11 +4,10 @@ import { Address, Hash } from 'viem'
 export interface IRedeemStorage {
     amount: string
     address: Address
-    hash: Hash
+    hash: string
 }
 const useLocalStorage = (key: string) => {
     const [state, setState] = useState(() => {
-        // Initialize the state
         try {
             const value = window.localStorage.getItem(key)
             return value ? JSON.parse(value) : {}
@@ -16,11 +15,15 @@ const useLocalStorage = (key: string) => {
             console.log(error)
         }
     })
-    const setValue = (amount: string, address: Address, hash: Hash) => {
-        let valueToStore = {};
+    const setValue = (amount: string, address: Address, hash: string) => {
+        let valueToStore = [];
+        window.localStorage.clear()
         try {
-            if (Object.keys(state).length > 0) {
-                valueToStore = [...state, { amount, address, hash }];
+            if (Object.values(state).length > 0) {
+                console.log(Object.values(state), "Object.values(state)")
+                console.log(Object.values(state).includes(hash), "Object.values(state).includes(hash)")
+
+                valueToStore = Object.values(state).includes(hash) ? state.filter((v: any) => v !== v.hash) : [...state, { amount, address, hash }]
             } else {
                 valueToStore = [{ amount, address, hash }];
             }

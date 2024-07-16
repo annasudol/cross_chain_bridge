@@ -24,14 +24,13 @@ export function Bridge() {
   const [_value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
 
   async function handleSendTransaction() {
+    setValue()
     if (chain && address) {
       writeContract({
         address: chains[chain?.id].bridgeAddress,
-        abi: parseAbi([
-          'function swap(address to, uint256 amount, uint256 nonce, uint256 chainId, string memory symbol)',
-        ]),
+        abi: parseAbi(['function swap(address to, uint256 amount, string memory symbol)']),
         functionName: 'swap',
-        args: [address, parseEther(amount), BigInt(0), BigInt(chains[chain?.id].id), chains[chain?.id].name],
+        args: [address, parseEther(amount), chains[chain?.id].name],
       })
     } else {
       Add(`Unknown chain ID or an address`, {
@@ -42,11 +41,12 @@ export function Bridge() {
 
   useEffect(() => {
     if (txSuccess) {
+      setBalance(() => (Number(balance) - Number(amount)).toString())
+      setValue(amount, address, hash)
       Add(`Transaction successful`, {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
-      setValue(amount, address, hash)
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',

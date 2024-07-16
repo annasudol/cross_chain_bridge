@@ -9,52 +9,30 @@ import { Address, parseAbi, parseEther, parseUnits } from 'viem'
 import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
-import { signMessage } from '@/utils/helpers/signMessage'
 
 export function Redeem() {
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
-  const [_value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
-  const [value] = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
-  async function handleSendTransaction() {
-    if (address && chain?.id) {
-      const messageHash = await signMessage(
-        address,
-        address,
-        BigInt(Number(value[0].amount)),
-        BigInt(chain?.id),
-        chains[chain?.id].name
-      )
-      console.log(messageHash, 'messageHash')
-      if (messageHash) {
-        writeContract({
-          address: chains[chain?.id].bridgeAddress,
-          abi: parseAbi([
-            'function redeem(address from, address to, uint256 amount, uint256 nonce, uint256 _chainId, string memory symbol, bytes calldata signature)',
-          ]),
-          functionName: 'redeem',
-          args: [
-            address,
-            address,
-            parseEther(value[0].amount),
-            BigInt(0),
-            BigInt(chains[chain?.id].id),
-            chains[chain?.id].name,
-            messageHash as `0x${string}`,
-          ],
-        })
-      } else {
-        Add(`Unknown chain ID or an address`, {
-          type: 'error',
-        })
-      }
-    } else {
-      Add(`Unknown chain ID or an address`, {
-        type: 'error',
-      })
-    }
+  const [value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
+  console.log(value, 'value')
+  async function handleSendTransaction(v: any) {
+    setValue(v)
+    // if (address && chain?.id) {
+    //     writeContract({
+    //       address: chains[chain?.id].bridgeAddress,
+    //       abi: parseAbi([
+    //         'function redeem(address from, address to, uint256 amount, uint256 tx_hash, string memory symbol)',
+    //       ]),
+    //       functionName: 'redeem',
+    //     args: [address, address, parseEther(value[0].amount), chains[chain?.id].name, messageHash],
+    //     })
+    // } else {
+    //   Add(`Unknown chain ID or an address`, {
+    //     type: 'error',
+    //   })
+    // }
   }
 
   useEffect(() => {
@@ -64,7 +42,6 @@ export function Redeem() {
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
     } else if (txError) {
-      console.log(txError, 'txError')
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
       })
@@ -90,13 +67,13 @@ export function Redeem() {
   }
   return (
     <div className='p-6'>
-      {value &&
+      {/* {value &&
         value.length &&
         value.map((v: any) => (
-          <ButtonSubmit key={v.hash} onClick={handleSendTransaction}>
+          <ButtonSubmit key={v.hash} onClick={() => handleSendTransaction(v)}>
             Redeem {v.amount} {chains[chain?.id as number]?.name}
           </ButtonSubmit>
-        ))}
+        ))} */}
     </div>
   )
 }

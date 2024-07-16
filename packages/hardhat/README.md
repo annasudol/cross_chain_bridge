@@ -13,18 +13,16 @@ npx hardhat coverage
 ```bash
 npx hardhat run scripts/deploy_sETH.ts --network sepolia 
 npx hardhat run scripts/deploy_bridge_sETH.ts --network sepolia 
-npx hardhat grantRole --bridge [bridgeAddress] --token [sETH address] --network sepolia
+npx hardhat grantRole --bridge [bridgeAddress] --token [sETHaddress] --network sepolia
 
 
-'sETH' 100
-npx hardhat verify --network sepolia 0x86B6b5B004F4cBEbA4Abde77a7D2f8E9f73B39f5 'Eth_Sepolia' 'sETH' 0xd67674d605e4aF65B809A0d045eCa5781E7c48cF 0x86B6b5B004F4cBEbA4Abde77a7D2f8E9f73B39f5 11155111
+
 ```
 ## Contract deployments on Binance Testnet
 ```bash
-npx hardhat run scripts/deploy_tBSC.ts --network bscTestnet //0xf097BC82bbAF699fb99796aabeB0e1649F279715
-npx hardhat run scripts/deploy_bridge_tBSC.ts --network bscTestnet //0xA602ECB13aDd8f71787e5B1461CD5683a39e8A82
+npx hardhat run scripts/deploy_tBSC.ts --network bscTestnet //0x1C8cd559b58958679886F0Ab10c3455110A4aF2C
+npx hardhat run scripts/deploy_bridge_tBSC.ts --network bscTestnet //0x67408729BFD8192673ADc073D4Ca33A56c55811d
 npx hardhat grantRole --bridge [bridgeAddress] --token [BSC address] --network bscTestnet
-
 
 ```
 
@@ -36,7 +34,7 @@ npx hardhat grantRole --bridge [bridgeAddress] --token [BSC address] --network b
 ```
 ## Taks for swap from Binance to Ethereum
 ```tasks
-1. npx hardhat swapBSC --to [address] --value [value] --network bsctestnet
+1. npx hardhat swapBSC --to [address] --value [value] --network bscTestnet
 2. then copy values from console for redeem with signature
 ```
 
@@ -54,23 +52,23 @@ Swap token from Binance to Ethereum
 npx hardhat swapETH --to 0xd06ffA953497355eEce263007D88966Ef888b21F --value 100 --network sepolia
 /////------------------------TOKENS----------------------------------//////
 ## Token sETH on Sepolia Tesnet 
-### 0x86B6b5B004F4cBEbA4Abde77a7D2f8E9f73B39f5
-[contract at sepolia.etherscan.io] (https://sepolia.etherscan.io/address/0x86B6b5B004F4cBEbA4Abde77a7D2f8E9f73B39f5#code)
+### 0xB2590B5e4Aa210f1536FA5707B79dD695E781809
+[contract at sepolia.etherscan.io] (https://sepolia.etherscan.io/address/0xB2590B5e4Aa210f1536FA5707B79dD695E781809)
 
 ## Token_BSC on Binance Testnet 
-### BSC 0xf097BC82bbAF699fb99796aabeB0e1649F279715
-[contract at bscscan] (https://testnet.bscscan.com/address/0xf097BC82bbAF699fb99796aabeB0e1649F279715#code)
+### BSC 0x1C8cd559b58958679886F0Ab10c3455110A4aF2C
+[contract at Bscscan] (https://testnet.bscscan.com/address/0x1C8cd559b58958679886F0Ab10c3455110A4aF2C)
 
 
 /////------------------------BRIDGES----------------------------------//////
 ## Bridge Ethereum
-### Sepolia 0xED3649735e62a82C8121e2650A9C2177ddb6155F
-[contract at sepolia.etherscan.io] (https://sepolia.etherscan.io/address/0xED3649735e62a82C8121e2650A9C2177ddb6155F#code)
+### Sepolia 0x43bAeD0FA2AA5a5eA269B49EAF26821C6c0B22EF
+[contract at sepolia.etherscan.io] (https://sepolia.etherscan.io/address/0x43bAeD0FA2AA5a5eA269B49EAF26821C6c0B22EF)
 
 
 ## Bridge Bscscan 
-### Bscscan 0x2D5a4AEa4c2B6d34da76f23e062051F1656B428a
-[contract at testnet bscscan] (https://testnet.bscscan.com/address/0x2D5a4AEa4c2B6d34da76f23e062051F1656B428a#code)
+### Bscscan 0x67408729BFD8192673ADc073D4Ca33A56c55811d
+[contract at testnet bscscan] (https://testnet.bscscan.com/address/0x67408729BFD8192673ADc073D4Ca33A56c55811d#code)
 
 # Frontend app built with next.js - work in progress
 ```
