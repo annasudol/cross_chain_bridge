@@ -12,9 +12,14 @@ import { parseAbi, parseEther } from 'viem'
 import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
+import { ModalUI } from '@/components/ModalUI'
+import { useChainModal } from '@rainbow-me/rainbowkit'
 
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
+  const [swapTxIsSuccess, setSwapTxIsSuccess] = useState(false)
+
+  const { openChainModal } = useChainModal()
 
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
@@ -46,6 +51,7 @@ export function Bridge() {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
+      setSwapTxIsSuccess(true)
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
@@ -68,8 +74,9 @@ export function Bridge() {
       </div>
     )
   }
+
   return (
-    <div className='p-6'>
+    <div className='flex flex-col justify-between py-4 px-2 h-96'>
       <SwitchNetworkBtn />
       <div className='py-2 pl-1'>
         {address && chain?.id && (
@@ -85,19 +92,24 @@ export function Bridge() {
           </p>
         )}
       </div>
-      <div className='flex flex-col m-2'>
-        <label className='form-control w-full'>
-          <div className='label'>{chain?.id && <TokenName chainId={chain?.id} />}</div>
-          <TokenQuantityInput onChange={setAmount} quantity={amount} maxValue={balance} />
-        </label>
-        <ButtonSubmit
-          onClick={handleSendTransaction}
-          disabled={!address || Number(amount) < 0.01}
-          isLoading={isPending || isLoading}>
-          Swap {amount} {chains[chain?.id as number]?.name} to{' '}
-          {chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}
-        </ButtonSubmit>
-      </div>
+      {swapTxIsSuccess ? (
+        <ButtonSubmit onClick={() => openChainModal && openChainModal()}>click to change network</ButtonSubmit>
+      ) : (
+        <div className='m-2'>
+          <div className='form-control w-full'>
+            <div className='label'>{chain?.id && <TokenName chainId={chain?.id} />}</div>
+            <TokenQuantityInput onChange={setAmount} quantity={amount} maxValue={balance} />
+          </div>
+
+          <ButtonSubmit
+            onClick={handleSendTransaction}
+            disabled={!address || Number(amount) < 0.01}
+            isLoading={isPending || isLoading}>
+            Swap {amount} {chains[chain?.id as number]?.name} to{' '}
+            {chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}
+          </ButtonSubmit>
+        </div>
+      )}
     </div>
   )
 }

@@ -5,12 +5,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 
 import { chains } from '../contracts'
-import { Address, parseAbi, parseEther, parseUnits } from 'viem'
+import { parseAbi, parseEther } from 'viem'
 import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import { IStorage } from '@/utils/types'
-import { useMutation } from '@tanstack/react-query'
 
 export function Redeem() {
   const { Add } = useNotifications()
@@ -18,7 +17,8 @@ export function Redeem() {
   const { data: hash, error, writeContract } = useWriteContract()
   const { error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
   const { state, setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
-  const [txRedeemed, setTxRedeemed] = useState<IStorage>()
+  const [txRedeemed, setTxRedeemed] = useState<IStorage>();
+
   async function handleSendTransaction(v: IStorage) {
     if (address && chain?.id) {
       setTxRedeemed({ amount: v.amount, address: v.address, hash: v.hash })
@@ -39,7 +39,6 @@ export function Redeem() {
 
   useEffect(() => {
     if (txSuccess && txRedeemed) {
-      console.log(txRedeemed, 'txRedeemed')
       setValue(txRedeemed.amount, txRedeemed.address, txRedeemed.hash)
       Add(`Transaction successful`, {
         type: 'success',
@@ -58,10 +57,22 @@ export function Redeem() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txSuccess, txError, error])
-  console.log(state, 'state')
+
+  const redeemBtn = useMemo(() => {
+    const redeemState = state && state?.length > 3 ? state.slice(state.length - 4, state.length - 1) : state
+    return (
+      redeemState &&
+      redeemState.map((v: any) => (
+        <ButtonSubmit key={v.hash} onClick={() => handleSendTransaction(v)}>
+          Redeem {v.amount} {chains[chain?.id as number]?.name}
+        </ButtonSubmit>
+      ))
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chain?.id, state])
   if (!address) {
     return (
-      <div className='flex justify-center items-center w-full h-full'>
+      <div className='items-center flex flex-col justify-between py-4 px-2 h-96'>
         <div className='text-center flex flex-col items-center'>
           <p className='text-white mb-4'>Connect wallet !</p>
           <Connect />
@@ -69,17 +80,12 @@ export function Redeem() {
       </div>
     )
   }
-  const redeemBtn = useMemo(() => {
-    if (state && state.length > 0) {
-      return state.map((v: any) => (
-        <ButtonSubmit key={v.hash} onClick={() => handleSendTransaction(v)}>
-          Redeem {v.amount} {chains[chain?.id as number]?.name}
-        </ButtonSubmit>
-      ))
-    } else {
-      return <p className='text-center'>No transactions to redeem</p>
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chain?.id, state])
-  return <div className='p-6'>{redeemBtn}</div>
+  if (!state || state.length == 0)
+    return (
+      <div className='items-center flex flex-col justify-between py-4 px-2 h-96'>
+        <p className='text-center text-white'>No transactions to redeem</p>
+      </div>
+    )
+
+  return <div className='py-4 px-2'>{redeemBtn}</div>
 }
