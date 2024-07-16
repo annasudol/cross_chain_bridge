@@ -77,6 +77,7 @@ export function Alert(props: Props) {
       {props.href && (
         <LinkComponent href={props.href}>
           <ArrowUpRightIcon className='h-4 w-4' />
+          Etherscan
         </LinkComponent>
       )}
     </div>

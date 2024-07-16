@@ -21,10 +21,9 @@ export function Bridge() {
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
-  const [_value, setValue] = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
+  const { setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
 
   async function handleSendTransaction() {
-    setValue()
     if (chain && address) {
       writeContract({
         address: chains[chain?.id].bridgeAddress,
@@ -40,7 +39,7 @@ export function Bridge() {
   }
 
   useEffect(() => {
-    if (txSuccess) {
+    if (txSuccess && hash && address) {
       setBalance(() => (Number(balance) - Number(amount)).toString())
       setValue(amount, address, hash)
       Add(`Transaction successful`, {

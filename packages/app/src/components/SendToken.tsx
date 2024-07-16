@@ -111,7 +111,7 @@ export default function SendToken() {
               </div>
               <div className='stat-title'>Your balance</div>
               {/* {address ? <TokenBalance address={address} /> : <p>Please connect your wallet</p>} */}
-            </div>x
+            </div>
           </div>
           <button
             className='btn w-[100%] '

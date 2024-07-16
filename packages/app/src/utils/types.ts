@@ -1,3 +1,5 @@
+import { Address } from "viem"
+
 export interface State<T> {
   loading: boolean
   data?: T
@@ -12,4 +14,10 @@ export interface Notification {
   timestamp: number
   from?: string
   href?: string
+}
+
+export interface IStorage {
+  amount: string
+  address: Address
+  hash: string
 }
