@@ -58,7 +58,7 @@ export function Bridge() {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
-      setSwapTxIsSuccess(true)
+      if (!isLoading && !isPending && !isPendingSwap) setSwapTxIsSuccess(true)
     } else if (txError) {
       Add(`Transaction failed: ${txError.cause}`, {
         type: 'error',
@@ -69,7 +69,7 @@ export function Bridge() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txSuccess, txError, error])
+  }, [txSuccess, txError, error, isLoading, isPending, isPendingSwap])
 
   if (!address) {
     return (
@@ -99,7 +99,7 @@ export function Bridge() {
           </p>
         )}
       </div>
-      {!isLoading && !isPending && !isPendingSwap && swapTxIsSuccess ? (
+      {swapTxIsSuccess ? (
         <ButtonSubmit onClick={handleClick}>
           click to change network to {chains[chain?.id || 97].swapTokensChains[0]}
         </ButtonSubmit>

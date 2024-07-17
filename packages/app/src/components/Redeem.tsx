@@ -41,7 +41,7 @@ export function Redeem() {
   useEffect(() => {
     if (txSuccess && txRedeemed) {
       setValue(txRedeemed.amount, txRedeemed.address, txRedeemed.hash)
-      Add(`Transaction successful`, {
+      Add(`The Redeem transaction is completed`, {
         type: 'success',
         href: chain?.blockExplorers?.default.url ? `${chain.blockExplorers.default.url}/tx/${hash}` : undefined,
       })
