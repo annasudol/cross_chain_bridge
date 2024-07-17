@@ -60,7 +60,11 @@ export function Redeem() {
   }, [txSuccess, txError, error])
 
   const redeemBtn = useMemo(() => {
-    const redeemState = state && state?.length > 3 ? state.slice(state.length - 4, state.length - 1) : state
+    const redeemByAccount = state?.filter((x) => x.address === address)
+    const redeemState =
+      redeemByAccount && redeemByAccount?.length > 3
+        ? redeemByAccount.slice(redeemByAccount.length - 4, redeemByAccount.length - 1)
+        : redeemByAccount
     return (
       redeemState &&
       redeemState.map((v: any) => (
@@ -70,7 +74,7 @@ export function Redeem() {
       ))
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chain?.id, state])
+  }, [chain?.id, state, address])
   if (!address) {
     return (
       <div className='items-center flex flex-col justify-between py-4 px-2 h-96'>
