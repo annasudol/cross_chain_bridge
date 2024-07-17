@@ -36,7 +36,7 @@ export function Bridge() {
     setSwapTxIsSuccess(false)
   }
   async function handleSendTransaction() {
-    if (chain && address) {
+    if (chain && chain?.id && address) {
       writeContract({
         address: chains[chain?.id].bridgeAddress,
         abi: parseAbi(['function swap(address to, uint256 amount, string memory symbol)']),
