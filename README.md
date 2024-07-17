@@ -18,4 +18,4 @@ yarn dev
 - [App](./packages/app) - Next.js 14, with App router
 - [Hardhat](./packages/hardhat/) - Hardhat project
 
-![alt text]('./img/screen-rec')
+![alt text]('.img/screen-rec.mov')
