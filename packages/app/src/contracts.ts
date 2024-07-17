@@ -1,7 +1,4 @@
-/* eslint-disable prettier/prettier */
-export const NEXT_PUBLIC_TOKEN_tBSC_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_tBSC_ADDRESS
-export const NEXT_PUBLIC_BRIDGE_tBSC_Address = process.env.NEXT_PUBLIC_BRIDGE_tBSC_Address
-export const NEXT_PUBLIC_TOKEN_sETH_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_sETH_ADDRESS
-export const NEXT_PUBLIC_BRIDGE_sETH_Address = process.env.NEXT_PUBLIC_BRIDGE_sETH_Address
-
-
+export const TOKEN_tBSC_ADDRESS = '0xf097BC82bbAF699fb99796aabeB0e1649F279715'
+export const BRIDGE_BSC_Address = '0x2D5a4AEa4c2B6d34da76f23e062051F1656B428a'
+export const TOKEN_sETH_ADDRESS = '0x86B6b5B004F4cBEbA4Abde77a7D2f8E9f73B39f5'
+export const BRIDGE_sETH_Address = '0xED3649735e62a82C8121e2650A9C2177ddb6155F'
