@@ -24,7 +24,12 @@ export function Bridge() {
   const { address, chain } = useAccount()
   const [balance, setBalance] = useState<string>()
   const { data: hash, error, isPending, writeContract } = useWriteContract()
-  const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
+  const {
+    isLoading,
+    isPending: isPendingSwap,
+    error: txError,
+    isSuccess: txSuccess,
+  } = useWaitForTransactionReceipt({ hash })
   const { setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
   const handleClick = () => {
     openChainModal && openChainModal()
@@ -94,7 +99,7 @@ export function Bridge() {
           </p>
         )}
       </div>
-      {swapTxIsSuccess ? (
+      {!isLoading && !isPending && !isPendingSwap && swapTxIsSuccess ? (
         <ButtonSubmit onClick={handleClick}>
           click to change network to {chains[chain?.id || 97].swapTokensChains[0]}
         </ButtonSubmit>

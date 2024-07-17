@@ -18,7 +18,6 @@ const useLocalStorage = (key: string) => {
         try {
             if (state && Object.values(state).length > 0) {
                 valueToStore = state.filter((v: IStorage) => v.hash === tx_hash).length > 0 ? state.filter((v: IStorage) => v.hash !== tx_hash) : [...state, { amount, address, hash: tx_hash }];
-                console.log(valueToStore, "valueToStore")
             } else {
                 valueToStore = [{ amount, address, hash: tx_hash }];
             }

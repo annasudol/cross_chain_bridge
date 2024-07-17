@@ -92,8 +92,12 @@ export function Redeem() {
       </div>
     )
   if (isLoading) {
-    return <Loading message='Waiting to complete Redeem transaction' />
+    return <Loading message='Waiting to complete the redeem transaction' />
   }
 
-  return <div className='py-4 px-2'>{redeemBtn}</div>
+  return (
+    <div className='py-4 px-2 text-center text-white'>
+      {redeemBtn && redeemBtn.length > 0 ? redeemBtn : 'No transactions to redeem'}
+    </div>
+  )
 }

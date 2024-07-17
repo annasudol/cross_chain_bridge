@@ -17,7 +17,7 @@ export function TokenQuantityInput({
 }: TokenQuantityInputProps) {
   const [amount, setAmount] = useState('0.00')
 
-  const smallestStep = parseFloat(amount) < 1 ? 1 / Math.pow(10, maxValue?.split('.')[1].length ?? 1) : 1
+  const smallestStep = parseFloat(amount) < 1 ? 1 / Math.pow(10, maxValue?.split('.')[1]?.length ?? 1) : 1
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // only allow numbers and one decimal point
