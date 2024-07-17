@@ -16,9 +16,9 @@ export function Redeem() {
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
   const { data: hash, error, writeContract } = useWriteContract()
-  const { isPending, isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
+  const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
   const { state, setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
-  const [txRedeemed, setTxRedeemed] = useState<IStorage>();
+  const [txRedeemed, setTxRedeemed] = useState<IStorage>()
 
   async function handleSendTransaction(v: IStorage) {
     if (address && chain?.id) {
