@@ -20,8 +20,8 @@ npx hardhat grantRole --bridge [bridgeAddress] --token [sETHaddress] --network s
 ```
 ## Contract deployments on Binance Testnet
 ```bash
-npx hardhat run scripts/deploy_tBSC.ts --network bscTestnet //0x1C8cd559b58958679886F0Ab10c3455110A4aF2C
-npx hardhat run scripts/deploy_bridge_tBSC.ts --network bscTestnet //0x67408729BFD8192673ADc073D4Ca33A56c55811d
+npx hardhat run scripts/deploy_tBSC.ts --network bscTestnet
+npx hardhat run scripts/deploy_bridge_tBSC.ts --network bscTestnet 
 npx hardhat grantRole --bridge [bridgeAddress] --token [BSC address] --network bscTestnet
 
 ```
@@ -29,27 +29,21 @@ npx hardhat grantRole --bridge [bridgeAddress] --token [BSC address] --network b
 ## Taks for swap from Ethereum to Binance
 ```tasks
 1. npx hardhat swapETH --to [address] --value [value] --network sepolia
-2. then copy values from console for redeem with signature
+2. then copy values from console for redeem on Binance network
 
 ```
 ## Taks for swap from Binance to Ethereum
 ```tasks
 1. npx hardhat swapBSC --to [address] --value [value] --network bscTestnet
-2. then copy values from console for redeem with signature
+2. then copy values from console for redeem on Sepolia network
 ```
 
-## swaps explained
+## swaps and redeem explained
 when Swap token from Ethereum to Binance
-1. eETH tokens are burn on Ethereum contract by Bridge ETH
-2. Signed message is created
-3. Reedem function can be run with created previously message, then: Tokens tBSC are minted on the Binance network
+1. Swap  - sSETH tokens are burn on Ethereum Sepolia contract by Bridge ETH  - tokens are burn and balance is decreased
+2. User need to redeem tokens on the Binance network, tokens are minted and balance of the tokens are increased
 
-Swap token from Binance to Ethereum
-1. tBSC tokens are burn on Binance ERC20 contract by Bridge BSC
-2. Signed message is created
-3. Reedem function can be run with created previously message, then: eETH Tokens are minted on the Ethereum network
 
-npx hardhat swapETH --to 0xd06ffA953497355eEce263007D88966Ef888b21F --value 100 --network sepolia
 /////------------------------TOKENS----------------------------------//////
 ## Token sETH on Sepolia Tesnet 
 ### 0xB2590B5e4Aa210f1536FA5707B79dD695E781809
