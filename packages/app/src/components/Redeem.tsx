@@ -4,7 +4,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagm
 import { useEffect, useMemo, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 
-import { chains } from '../contracts'
+import { chains } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
 import { Connect } from '@/components/Connect'
 import useLocalStorage from '@/app/hooks/useLocalStorage'

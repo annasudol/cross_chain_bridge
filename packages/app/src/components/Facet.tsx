@@ -9,7 +9,7 @@ import { ButtonSubmit } from '@/components/ButtonSubmit'
 
 import { parseAbi } from 'viem'
 import { useWriteContract } from 'wagmi'
-import { chains } from '@/contracts'
+import { chains } from '@/chains'
 import { Connect } from '@/components/Connect'
 import { useNotifications } from '@/context/Notifications'
 

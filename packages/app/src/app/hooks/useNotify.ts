@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { useEffect } from 'react'
