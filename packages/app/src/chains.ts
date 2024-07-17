@@ -6,7 +6,17 @@ import {
   NEXT_PUBLIC_TOKEN_tBSC_ADDRESS,
 } from './contracts'
 
-export const chains = {
+export interface IChain {
+  name: string
+  bridgeAddress: Address
+  tokenAddress: Address
+  id: number
+  swapTokens: string[]
+  swapTokensId: number[]
+  swapTokensChains: string[]
+  etherscan: string
+}
+export const chains: { [id: number]: IChain } = {
   11155111: {
     name: 'sETH',
     bridgeAddress: NEXT_PUBLIC_BRIDGE_sETH_Address as Address,
