@@ -6,9 +6,9 @@ import { useNotifications } from '@/context/Notifications'
 
 import { chains } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
-import { Connect } from '@/components/ConnectWallet'
+import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
-import { ButtonSubmit } from '@/components/ButtonSubmit'
+import { ButtonSubmit } from '@/components/ui/ButtonSubmit'
 import { IStorage } from '@/utils/types'
 import { Loading } from './Loading'
 
@@ -75,16 +75,7 @@ export function Redeem() {
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chain?.id, state, address])
-  if (!address) {
-    return (
-      <div className='items-center flex flex-col justify-between py-4 px-2 h-96'>
-        <div className='text-center flex flex-col items-center'>
-          <p className='text-white mb-4'>Connect wallet !</p>
-          <Connect />
-        </div>
-      </div>
-    )
-  }
+
   if (!state || state.length == 0)
     return (
       <div className='items-center flex flex-col justify-between py-4 px-2 h-96'>
@@ -96,8 +87,10 @@ export function Redeem() {
   }
 
   return (
-    <div className='py-4 px-2 text-center text-white'>
-      {redeemBtn && redeemBtn.length > 0 ? redeemBtn : 'No transactions to redeem'}
-    </div>
+    <ConnectWallet>
+      <div className='py-4 px-2 text-center text-white'>
+        {redeemBtn && redeemBtn.length > 0 ? redeemBtn : 'No transactions to redeem'}
+      </div>
+    </ConnectWallet>
   )
 }

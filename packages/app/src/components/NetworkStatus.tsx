@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useBlockNumber, useAccount } from 'wagmi'
-import { LinkComponent } from './LinkComponent'
+import { LinkComponent } from './ui/LinkComponent'
 
 export function NetworkStatus() {
   const block = useBlockNumber({ watch: true })

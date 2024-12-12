@@ -1,5 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { ChainIcon } from '@/components/ChainIcon'
+import { ChainIcon } from '@/components/ui/ChainIcon'
 interface ISwitchNetworkBtn {
   label?: string
 }

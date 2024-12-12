@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkComponent } from './LinkComponent'
+import { LinkComponent } from './ui/LinkComponent'
 import { SITE_EMOJI } from '@/utils/site'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { NotificationsDrawer } from './alert/NotificationsDrawer'
