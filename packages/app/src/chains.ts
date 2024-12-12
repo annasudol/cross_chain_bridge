@@ -17,7 +17,7 @@ export interface IChain {
 export const chains: { [id: number]: IChain } = {
   11155111: {
     name: 'sETH',
-    bridgeAddress: BRIDGE_BSC_Address,
+    bridgeAddress: BRIDGE_sETH_Address,
     tokenAddress: TOKEN_sETH_ADDRESS,
     id: 11155111,
     swapTokens: ['tBSC'],

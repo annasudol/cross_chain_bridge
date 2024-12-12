@@ -6,7 +6,8 @@ interface TokenQuantityInputProps {
   quantity: string
   maxValue?: string
   displayMaxClearButtons?: boolean
-  disabled?: boolean
+  disabled?: boolean,
+  minValue?: string,
 }
 export function TokenQuantityInput({
   onChange,
@@ -14,32 +15,29 @@ export function TokenQuantityInput({
   maxValue,
   displayMaxClearButtons = true,
   disabled = false,
+  minValue = '0.01',
 }: TokenQuantityInputProps) {
-  const [amount, setAmount] = useState('0.00')
+  // const [amount, setAmount] = useState(minValue)
 
-  const smallestStep = parseFloat(amount) < 1 ? 1 / Math.pow(10, maxValue?.split('.')[1]?.length ?? 1) : 1
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // only allow numbers and one decimal point
     if (!/^\d*\.?\d*$/.test(e.target.value)) {
       return
     }
-    setAmount(e.target.value)
     onChange(e.target.value)
   }
 
   const handleSetMax = () => {
-    setAmount(maxValue ?? '0.00')
     onChange(maxValue ?? '0.00')
   }
 
   const handleClear = () => {
-    setAmount('0.00')
-    onChange('0.00')
+    onChange(minValue)
   }
 
   useEffect(() => {
-    setAmount(quantity)
+    Number(maxValue) < Number(quantity) && onChange(maxValue as string)
   }, [quantity])
 
   return (
@@ -47,7 +45,7 @@ export function TokenQuantityInput({
       <input
         type='text'
         placeholder='0.01'
-        value={amount}
+        value={quantity}
         className='w-[100%] rounded-md bg-gray-600 bg-opacity-20 px-4 py-3 text-base text-white outline-none'
         pattern='^-?[0-9]\d*\.?\d*$'
         onChange={(e) => handleChange(e)}
@@ -55,22 +53,13 @@ export function TokenQuantityInput({
       />
 
       <div className={`${displayMaxClearButtons ? 'flex' : 'hidden'}  flex-row gap-2 w-full`}>
-        <button onClick={handleSetMax} className='btn btn-xs btn-outline btn-neutral'>
+        <button onClick={handleSetMax} disabled={quantity === maxValue} className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200 disabled:opacity-20'>
           Max
         </button>
-        <button onClick={handleClear} className='btn btn-xs btn-outline btn-neutral'>
+        <button onClick={handleClear} disabled={quantity === minValue} className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200'>
           Clear
         </button>
       </div>
-      <input
-        onChange={(e) => handleChange(e)}
-        value={amount}
-        type='range'
-        step={smallestStep}
-        max={maxValue ?? 100}
-        min={0.01}
-        className='range range-xs'
-      />
     </div>
   )
 }

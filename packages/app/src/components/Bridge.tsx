@@ -52,7 +52,7 @@ export function Bridge() {
 
   useEffect(() => {
     if (txSuccess && hash && address) {
-      setBalance(() => (Number(balance) - Number(amount)).toString())
+      // setBalance(() => (Number(balance) - Number(amount)).toString())
       setValue(amount, address, hash)
       Add(`Transaction successful`, {
         type: 'success',
@@ -85,7 +85,7 @@ export function Bridge() {
   return (
     <div className='flex flex-col justify-between py-4 px-2 h-96'>
       <SwitchNetworkBtn />
-      <div className='py-2 pl-1'>
+      <div className='py-2 pl-1 text-white'>
         {address && chain?.id && (
           <p>
             Your balance:{' '}
@@ -114,13 +114,15 @@ export function Bridge() {
               disabled={isPending || isLoading}
             />
           </div>
-
+          {Number(balance)}
           <ButtonSubmit
             onClick={handleSendTransaction}
             disabled={!address || Number(amount) < 0.01}
             isLoading={isPending || isLoading}>
-            Swap {amount} {chains[chain?.id as number]?.name} to{' '}
-            {chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}
+            {balance && Number(balance) < 0.01
+              ? 'Insufficient balance'
+              : `Swap ${amount} ${chains[chain?.id as number]?.name} to
+            ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
           </ButtonSubmit>
         </div>
       )}

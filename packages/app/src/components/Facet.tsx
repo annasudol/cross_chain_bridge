@@ -6,7 +6,7 @@ import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
 import { TokenInfoImg } from '@/components/TokenInfoImg'
 import { TokenBalance } from '@/components/TokenBalance'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
-
+import bridgeAbi from '@/abi/BridgeAbi.json'
 import { parseAbi } from 'viem'
 import { useWriteContract } from 'wagmi'
 import { chains } from '@/chains'
@@ -24,7 +24,7 @@ export function Facet() {
     if (chain) {
       writeContract({
         address: chains[chain?.id].bridgeAddress,
-        abi: parseAbi(['function facet()']),
+        abi: bridgeAbi,
         functionName: 'facet',
       })
     }

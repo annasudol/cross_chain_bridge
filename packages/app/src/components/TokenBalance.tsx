@@ -3,6 +3,7 @@ import { useReadContract } from 'wagmi'
 import { Dispatch, useEffect } from 'react'
 import { erc20Abi, formatEther } from 'viem'
 import type { Address } from 'viem'
+import tokenAbi from '@/abi/TokenABI.json'
 
 interface TokenBalanceProps {
   readonly address: Address
@@ -13,7 +14,7 @@ interface TokenBalanceProps {
 
 export const TokenBalance = ({ address, tokenAddress, balance, setBalance }: TokenBalanceProps) => {
   const tokenBalance = useReadContract({
-    abi: erc20Abi,
+    abi: tokenAbi,
     address: tokenAddress,
     functionName: 'balanceOf',
     args: [address],

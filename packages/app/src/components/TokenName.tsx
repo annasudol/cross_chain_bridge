@@ -5,5 +5,5 @@ interface TokenNameProps {
 }
 
 export const TokenName: React.FC<TokenNameProps> = ({ chainId }) => (
-  <span className='pr-2 text-base text-white'>{chains[chainId as number].name}</span>
+  <span className='pr-2 text-white'>{chains[chainId as number].name}</span>
 )

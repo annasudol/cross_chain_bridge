@@ -6,7 +6,7 @@ const config: Config = {
   plugins: [require('@tailwindcss/typography'), require('daisyui')],
   daisyui: {
     // More details at https://daisyui.com/docs/config/
-    themes: ['dark'],
+    themes: ['sythwave'],
   },
 }
 export default config
