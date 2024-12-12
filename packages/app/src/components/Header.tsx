@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkComponent } from './LinkComponent'
 import { SITE_EMOJI } from '@/utils/site'
-import { Connect } from './Connect'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { NotificationsDrawer } from './NotificationsDrawer'
 
 export function Header() {
@@ -13,8 +13,8 @@ export function Header() {
         </LinkComponent>
       </div>
 
-      <div className='flex gap-2 bg-indigo-950 rounded-md'>
-        <Connect />
+      <div className='flex gap-2 bg-indigo-950 rounded-md whitespace-nowrap p-2'>
+        <ConnectButton />
         <NotificationsDrawer />
       </div>
     </header>

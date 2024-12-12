@@ -9,7 +9,7 @@ import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
 import { TokenBalance } from '@/components/TokenBalance'
 import { chains } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
-import { Connect } from '@/components/Connect'
+import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import { useChainModal } from '@rainbow-me/rainbowkit'
@@ -71,61 +71,54 @@ export function Bridge() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txSuccess, txError, error, isLoading, isPending, isPendingSwap])
 
-  if (!address) {
-    return (
-      <div className='flex justify-center items-center w-full h-full'>
-        <div className='text-center flex flex-col items-center'>
-          <p className='text-white mb-4'>Connect wallet !</p>
-          <Connect />
-        </div>
-      </div>
-    )
-  }
+
 
   return (
-    <div className='flex flex-col justify-between py-4 px-2 h-96'>
-      <SwitchNetworkBtn />
-      <div className='py-2 pl-1 text-white'>
-        {address && chain?.id && (
-          <p>
-            Your balance:{' '}
-            <TokenBalance
-              setBalance={setBalance}
-              balance={balance}
-              address={address}
-              tokenAddress={chains[chain?.id].tokenAddress}
-            />
-            <span className='text-white mx-2'>{chains[chain?.id as number]?.name} </span>
-          </p>
+    <ConnectWallet>
+      <div className='flex flex-col justify-between py-4 px-2 h-96'>
+        <SwitchNetworkBtn />
+        <div className='py-2 pl-1 text-white'>
+          {address && chain?.id && (
+            <p>
+              Your balance:{' '}
+              <TokenBalance
+                setBalance={setBalance}
+                balance={balance}
+                address={address}
+                tokenAddress={chains[chain?.id].tokenAddress}
+              />
+              <span className='text-white mx-2'>{chains[chain?.id as number]?.name} </span>
+            </p>
+          )}
+        </div>
+        {swapTxIsSuccess ? (
+          <ButtonSubmit onClick={handleClick}>
+            click to change network to {chains[chain?.id || 97].swapTokensChains[0]}
+          </ButtonSubmit>
+        ) : (
+          <div className='m-2'>
+            <div className='form-control w-full'>
+              <div>{chain?.id && <TokenName chainId={chain?.id} />}</div>
+              <TokenQuantityInput
+                onChange={setAmount}
+                quantity={amount}
+                maxValue={balance}
+                disabled={isPending || isLoading}
+              />
+            </div>
+            {Number(balance)}
+            <ButtonSubmit
+              onClick={handleSendTransaction}
+              disabled={!address || Number(amount) < 0.01}
+              isLoading={isPending || isLoading}>
+              {balance && Number(balance) < 0.01
+                ? 'Insufficient balance'
+                : `Swap ${amount} ${chains[chain?.id as number]?.name} to
+              ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
+            </ButtonSubmit>
+          </div>
         )}
       </div>
-      {swapTxIsSuccess ? (
-        <ButtonSubmit onClick={handleClick}>
-          click to change network to {chains[chain?.id || 97].swapTokensChains[0]}
-        </ButtonSubmit>
-      ) : (
-        <div className='m-2'>
-          <div className='form-control w-full'>
-            <div>{chain?.id && <TokenName chainId={chain?.id} />}</div>
-            <TokenQuantityInput
-              onChange={setAmount}
-              quantity={amount}
-              maxValue={balance}
-              disabled={isPending || isLoading}
-            />
-          </div>
-          {Number(balance)}
-          <ButtonSubmit
-            onClick={handleSendTransaction}
-            disabled={!address || Number(amount) < 0.01}
-            isLoading={isPending || isLoading}>
-            {balance && Number(balance) < 0.01
-              ? 'Insufficient balance'
-              : `Swap ${amount} ${chains[chain?.id as number]?.name} to
-            ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
-          </ButtonSubmit>
-        </div>
-      )}
-    </div>
+    </ConnectWallet>
   )
 }

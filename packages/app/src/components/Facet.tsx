@@ -7,10 +7,9 @@ import { TokenInfoImg } from '@/components/TokenInfoImg'
 import { TokenBalance } from '@/components/TokenBalance'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import bridgeAbi from '@/abi/BridgeAbi.json'
-import { parseAbi } from 'viem'
 import { useWriteContract } from 'wagmi'
 import { chains } from '@/chains'
-import { Connect } from '@/components/Connect'
+import { ConnectWallet } from '@/components/ConnectWallet'
 import { useNotifications } from '@/context/Notifications'
 
 export function Facet() {
@@ -50,17 +49,9 @@ export function Facet() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txSuccess, txError, error])
 
-  if (!address) {
-    return (
-      <div className='items-center flex flex-col justify-between py-4 px-2 h-96'>
-        <div className='text-center flex flex-col items-center'>
-          <p className='text-white mb-4'>Connect wallet !</p>
-          <Connect />
-        </div>
-      </div>
-    )
-  }
+
   return (
+    <ConnectWallet>
     <div className='text-white flex flex-col justify-between py-4 px-2 h-96'>
       {chain?.name && (
         <div className='flex items-center'>
@@ -97,5 +88,6 @@ export function Facet() {
         Click to receive {chains[chain?.id as number]?.name}
       </ButtonSubmit>
     </div>
+    </ConnectWallet>
   )
 }

@@ -6,7 +6,7 @@ import { useNotifications } from '@/context/Notifications'
 
 import { chains } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
-import { Connect } from '@/components/Connect'
+import { Connect } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import { IStorage } from '@/utils/types'

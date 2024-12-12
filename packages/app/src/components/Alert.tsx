@@ -9,7 +9,7 @@ import {
 import { LinkComponent } from './LinkComponent'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { TruncateMiddle } from '@/utils/format'
+import { truncateMiddle } from '@/utils/format'
 import { NotificationType } from '@/utils/types'
 dayjs.extend(relativeTime)
 
@@ -51,7 +51,7 @@ export function StatusIcon(props: StatusProps) {
 }
 
 export function Alert(props: Props) {
-  let className = `alert flex flex-row text-left`
+  let className = `alert flex flex-row text-left bg-white bg-opacity-80 p-2 rounded-md gap-2`
   if (props.className) className += ` ${props.className}`
   return (
     <div className={className}>
@@ -60,14 +60,14 @@ export function Alert(props: Props) {
       </div>
 
       <div className='flex flex-col flex-grow'>
-        <h3 className='font-bold'>{props.message}</h3>
+        <span className='text-xs whitespace-normal'>{props.message}</span>
         <div className='flex flex-row gap-2'>
           <span className='text-xs'>{dayjs(props.timestamp).fromNow()}</span>
           {props.from && (
             <>
               <span className='text-xs'> · </span>
               <span className='text-xs text-secondary'>
-                {props.from.startsWith('0x') ? TruncateMiddle(props.from) : props.from}
+                {props.from.startsWith('0x') ? truncateMiddle(props.from) : props.from}
               </span>
             </>
           )}

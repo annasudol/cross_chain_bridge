@@ -11,7 +11,7 @@ export function NotificationsDrawer() {
   const className = 'shrink-0 h-5 w-5'
 
   return (
-    <div className='drawer drawer-end'>
+    <div className='drawer drawer-end z-50'>
       <input id='my-drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
         <label
@@ -51,7 +51,7 @@ export function NotificationsDrawer() {
                 />
               ))}
               <div className='place-self-end'>
-                <button className='btn btn-xs btn-link inline' onClick={Clear}>
+                <button className='btn btn-xs btn-link inline text-white' onClick={Clear}>
                   Clear notifications
                 </button>
               </div>

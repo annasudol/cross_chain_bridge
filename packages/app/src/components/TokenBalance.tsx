@@ -22,7 +22,7 @@ export const TokenBalance = ({ address, tokenAddress, balance, setBalance }: Tok
 
   useEffect(() => {
     if (tokenBalance.data) {
-      setBalance(Number(formatEther(tokenBalance?.data)).toFixed(2))
+      // setBalance(Number(formatEther(tokenBalance?.data)).toFixed(2))
       return
     }
   }, [setBalance, tokenBalance.data])
