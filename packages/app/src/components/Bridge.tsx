@@ -79,7 +79,7 @@ export function Bridge() {
         <SwitchNetworkBtn />
         <div className='py-2 pl-1 text-white'>
           {address && chain?.id && (
-            <p>
+            <>
               Your balance:{' '}
               <TokenBalance
                 setBalance={setBalance}
@@ -88,7 +88,7 @@ export function Bridge() {
                 tokenAddress={chains[chain?.id].tokenAddress}
               />
               <span className='text-white mx-2'>{chains[chain?.id as number]?.name} </span>
-            </p>
+            </>
           )}
         </div>
         {swapTxIsSuccess ? (
