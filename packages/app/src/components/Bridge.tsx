@@ -6,14 +6,13 @@ import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { TokenName } from '@/components/TokenName'
 import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
-import { TokenBalance } from '@/components/TokenBalance'
 import { chains } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
 import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import { useChainModal } from '@rainbow-me/rainbowkit'
-
+import { useBalance } from '@/app/hooks/useBalance'
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
   const [swapTxIsSuccess, setSwapTxIsSuccess] = useState(false)
@@ -22,7 +21,8 @@ export function Bridge() {
 
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
-  const [balance, setBalance] = useState<string>()
+  const { formattedBalance } = useBalance({ address, tokenAddress: chains[chain?.id || 11155111].tokenAddress })
+
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const {
     isLoading,
@@ -71,8 +71,6 @@ export function Bridge() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txSuccess, txError, error, isLoading, isPending, isPendingSwap])
 
-
-
   return (
     <ConnectWallet>
       <div className='flex flex-col justify-between py-4 px-2 h-96'>
@@ -80,13 +78,7 @@ export function Bridge() {
         <div className='py-2 pl-1 text-white'>
           {address && chain?.id && (
             <>
-              Your balance:{' '}
-              <TokenBalance
-                setBalance={setBalance}
-                balance={balance}
-                address={address}
-                tokenAddress={chains[chain?.id].tokenAddress}
-              />
+              Your balance: {formattedBalance}
               <span className='text-white mx-2'>{chains[chain?.id as number]?.name} </span>
             </>
           )}
@@ -102,16 +94,15 @@ export function Bridge() {
               <TokenQuantityInput
                 onChange={setAmount}
                 quantity={amount}
-                maxValue={balance}
+                maxValue={formattedBalance}
                 disabled={isPending || isLoading}
               />
             </div>
-            {Number(balance)}
             <ButtonSubmit
               onClick={handleSendTransaction}
               disabled={!address || Number(amount) < 0.01}
               isLoading={isPending || isLoading}>
-              {balance && Number(balance) < 0.01
+              {formattedBalance && Number(formattedBalance) < 0.01
                 ? 'Insufficient balance'
                 : `Swap ${amount} ${chains[chain?.id as number]?.name} to
               ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
