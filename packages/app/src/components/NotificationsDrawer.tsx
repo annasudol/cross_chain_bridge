@@ -18,8 +18,8 @@ export function NotificationsDrawer() {
           htmlFor='my-drawer'
           role='button'
           className={`btn btn-ghost btn-sm ${notifications.length === 0 ? 'text-gray-600' : ''} drawer-button`}>
-          {notifications.length > 0 && <BellSolid className={className} />}
-          {notifications.length === 0 && <BellOutline className={className} />}
+          {notifications.length > 0 && <BellSolid className={className} color='#a8eb12' />}
+          {notifications.length === 0 && <BellOutline className={className} color='#a8eb12' />}
         </label>
       </div>
 

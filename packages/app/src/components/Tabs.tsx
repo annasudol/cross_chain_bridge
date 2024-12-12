@@ -11,7 +11,7 @@ function classNames(...classes: string[]) {
 export const Tabs = () => {
   const categories = ['Bridge', 'Facet', 'Redeem']
   return (
-    <div className='mt-16 w-full max-w-xl py-16 sm:px-0'>
+    <div className='mt-16 w-full max-w-xl py-4 sm:px-0'>
       <Tab.Group>
         <Tab.List className='flex space-x-1 rounded-xl max-w-xl bg-indigo-950 p-1'>
           {categories.map((category) => (
