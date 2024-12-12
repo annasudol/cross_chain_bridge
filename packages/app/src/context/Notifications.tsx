@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi'
 import dayjs from 'dayjs'
 import 'react-toastify/dist/ReactToastify.min.css'
 import '@/assets/notifications.css'
-import { StatusIcon } from '@/components/Alert'
+import { StatusIcon } from '@/components/alert/Alert'
 
 type NotificationOptions = Partial<Omit<Notification, 'message'>>
 
