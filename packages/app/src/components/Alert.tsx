@@ -51,7 +51,7 @@ export function StatusIcon(props: StatusProps) {
 }
 
 export function Alert(props: Props) {
-  let className = `alert flex flex-row text-left bg-white bg-opacity-80 p-2 rounded-md gap-2`
+  let className = `alert flex flex-row text-left bg-white p-2 rounded-md gap-2`
   if (props.className) className += ` ${props.className}`
   return (
     <div className={className}>

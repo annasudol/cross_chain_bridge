@@ -28,7 +28,6 @@ export function NotificationsDrawer() {
         <div className='p-4 w-full md:w-1/2 min-h-full bg-base-100'>
           <div className='flex justify-between'>
             {notifications.length === 0 && <h3 className='text-lg mb-4'>No notifications</h3>}
-            {notifications.length > 0 && <h3 className='text-lg mb-4'>{notifications.length} Notification(s)</h3>}
             <span
               role='button'
               className='px-2'
