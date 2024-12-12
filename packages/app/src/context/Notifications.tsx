@@ -71,8 +71,8 @@ export function NotificationProvider(props: PropsWithChildren) {
         autoClose={10000}
         theme='dark'
         position='bottom-center'
-        toastClassName='flex relative bg-base-300 rounded-xl justify-between overflow-hidden p-2 mb-2 min-w- w-96'
-        bodyClassName='flex text-sm gap-2 px-4 py-2 bg-white rounded-xl text-black'
+        toastClassName='flex relative bg-base-300 rounded-xl justify-between overflow-hidden p-2 mb-2 w-96'
+        bodyClassName='flex text-sm gap-2 px-4 py-2 rounded-xl text-white'
       />
     </NotificationContext.Provider>
   )

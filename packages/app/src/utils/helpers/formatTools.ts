@@ -1,5 +1,4 @@
-export function truncateString(address: string) {
-  if (!address) return ''
-  if (address.length <= 18) return address
-  return `${address.slice(0, 9)}...${address.slice(-9)}`
+export function truncateString(str: string, maxLength = 18) {
+  if (str.length <= 18) return str
+  return `${str.slice(0, maxLength)}...${str.slice(-9)}`
 }

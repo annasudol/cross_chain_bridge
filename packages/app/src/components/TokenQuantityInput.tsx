@@ -6,8 +6,8 @@ interface TokenQuantityInputProps {
   quantity: string
   maxValue?: string
   displayMaxClearButtons?: boolean
-  disabled?: boolean,
-  minValue?: string,
+  disabled?: boolean
+  minValue?: string
 }
 export function TokenQuantityInput({
   onChange,
@@ -17,9 +17,6 @@ export function TokenQuantityInput({
   disabled = false,
   minValue = '0.01',
 }: TokenQuantityInputProps) {
-  // const [amount, setAmount] = useState(minValue)
-
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // only allow numbers and one decimal point
     if (!/^\d*\.?\d*$/.test(e.target.value)) {
@@ -53,10 +50,16 @@ export function TokenQuantityInput({
       />
 
       <div className={`${displayMaxClearButtons ? 'flex' : 'hidden'}  flex-row gap-2 w-full`}>
-        <button onClick={handleSetMax} disabled={quantity === maxValue} className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200 disabled:opacity-20'>
+        <button
+          onClick={handleSetMax}
+          disabled={quantity === maxValue}
+          className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200 disabled:opacity-20'>
           Max
         </button>
-        <button onClick={handleClear} disabled={quantity === minValue} className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200'>
+        <button
+          onClick={handleClear}
+          disabled={quantity === minValue}
+          className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200'>
           Clear
         </button>
       </div>

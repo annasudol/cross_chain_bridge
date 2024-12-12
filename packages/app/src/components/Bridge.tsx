@@ -13,6 +13,7 @@ import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ButtonSubmit'
 import { useChainModal } from '@rainbow-me/rainbowkit'
 import { useBalance } from '@/app/hooks/useBalance'
+import { truncateString } from '@/utils/helpers/formatTools'
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
   const [swapTxIsSuccess, setSwapTxIsSuccess] = useState(false)
@@ -21,7 +22,7 @@ export function Bridge() {
 
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
-  const { formattedBalance } = useBalance({ address, tokenAddress: chains[chain?.id || 11155111].tokenAddress })
+  const { formattedBalance } = useBalance({ address, tokenAddress: chains[chain?.id as number].tokenAddress })
 
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const {
@@ -30,7 +31,7 @@ export function Bridge() {
     error: txError,
     isSuccess: txSuccess,
   } = useWaitForTransactionReceipt({ hash })
-  const { setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].swapTokens[0]}`)
+  const { setValue } = useLocalStorage(`redeem-${chains[chain?.id as number].swapTokens[0]}`)
   const handleClick = () => {
     openChainModal && openChainModal()
     setSwapTxIsSuccess(false)
@@ -52,7 +53,6 @@ export function Bridge() {
 
   useEffect(() => {
     if (txSuccess && hash && address) {
-      // setBalance(() => (Number(balance) - Number(amount)).toString())
       setValue(amount, address, hash)
       Add(`Transaction successful`, {
         type: 'success',
@@ -60,11 +60,13 @@ export function Bridge() {
       })
       if (!isLoading && !isPending && !isPendingSwap) setSwapTxIsSuccess(true)
     } else if (txError) {
-      Add(`Transaction failed: ${txError.cause}`, {
+      const message = (txError?.cause as any).message.split('')[0]
+      Add(`Transaction failed: ${message || 'unknown reqason'}`, {
         type: 'error',
       })
     } else if (error) {
-      Add(`Transaction failed: ${error.message}`, {
+      const message = (error as any).message.split('  ')[0]
+      Add(`Transaction failed: ${message || 'unknown reqason'}`, {
         type: 'error',
       })
     }
@@ -79,7 +81,7 @@ export function Bridge() {
           {address && chain?.id && (
             <>
               Your balance: {formattedBalance}
-              <span className='text-white mx-2'>{chains[chain?.id as number]?.name} </span>
+              <span className='text-white mx-2'>{chains[chain?.id as number]?.name}</span>
             </>
           )}
         </div>
