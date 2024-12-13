@@ -1,17 +1,17 @@
 import Image from 'next/image'
 import Ethereum from '@/assets/icons/ethereum.png'
-import { TokenName } from '@/components/TokenName'
+import { getChainById } from '@/chains'
+
 interface TokenInfoImgProps {
-  name: string
-  title?: string
   id: number
+  title?: string
 }
 
-export const TokenInfoImg: React.FC<TokenInfoImgProps> = ({ name, title, id }) => (
+export const TokenInfoImg: React.FC<TokenInfoImgProps> = ({ title, id }) => (
   <div className='flex py-8 items-center'>
     {title && <p className='text-white pr-2 text-lg ml-1'>{title}</p>}
     <div className='flex px-2 py-1 rounded-full'>
-      <TokenName chainId={id} />
+      <span className='pr-2 text-white'>{getChainById(id).name}</span>
       <Image
         width={20}
         height={20}

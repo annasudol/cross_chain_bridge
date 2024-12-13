@@ -1,10 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useEffect, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
-import { TokenName } from '@/components/TokenName'
 import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
 import { getChainById } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
@@ -13,6 +11,7 @@ import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ui/ButtonSubmit'
 import { useChainModal } from '@rainbow-me/rainbowkit'
 import { useBalance } from '@/app/hooks/useBalance'
+
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
   const [swapTxIsSuccess, setSwapTxIsSuccess] = useState(false)
@@ -91,12 +90,13 @@ export function Bridge() {
         ) : (
           <div className='m-2'>
             <div className='form-control w-full'>
-              <div>{chain?.id && <TokenName chainId={chain?.id} />}</div>
               <TokenQuantityInput
+                id='swap-amount'
+                label={getChainById(chain?.id).name}
                 onChange={setAmount}
                 quantity={amount}
                 maxValue={formattedBalance}
-                disabled={isPending || isLoading}
+                disabled={isPending || isLoading || isPendingSwap || formattedBalance === '0.00'}
               />
             </div>
             <ButtonSubmit

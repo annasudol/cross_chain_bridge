@@ -50,7 +50,7 @@ export function Facet() {
       <div className='text-white flex flex-col justify-between py-4 px-2 h-96'>
         {chain?.name && (
           <div className='flex items-center'>
-            <TokenInfoImg name={chain?.name as string} title='Receive' id={chain.id} />
+            <TokenInfoImg title='Receive' id={chain.id} />
             <SwitchNetworkBtn label='on' />
           </div>
         )}

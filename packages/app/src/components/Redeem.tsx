@@ -10,7 +10,7 @@ import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ui/ButtonSubmit'
 import { IStorage } from '@/utils/types'
-import { Loading } from './Loading'
+import { Loading } from './ui/Loading'
 
 export function Redeem() {
   const { Add } = useNotifications()
