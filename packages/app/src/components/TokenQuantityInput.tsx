@@ -48,13 +48,13 @@ export function TokenQuantityInput({
 
   return (
     <div className='flex flex-col gap-2'>
-      <label className='pr-2 text-white disabled:disabled:text-gray-400' htmlFor={id}>{label}</label>
+      <label className='pr-2 text-white' htmlFor={id}>{label}</label>
       <input
         type='text'
         name={id}
         placeholder='0.01'
         value={quantity}
-        className='w-full rounded-md bg-gray-600 bg-opacity-20 px-4 py-3 text-base text-white outline-none disabled:opacity-70 disabled::cursor-not-allowed disabled:text-gray-400'
+        className='w-full rounded-md bg-gray-600 bg-opacity-20 px-4 py-3 text-base text-white outline-none'
         pattern='^-?[0-9]\d*\.?\d*$'
         onChange={(e) => handleChange(e)}
         disabled={disabled}
@@ -63,13 +63,13 @@ export function TokenQuantityInput({
       <div className={`${displayMaxClearButtons ? 'flex' : 'hidden'}  flex-row gap-2 w-full`}>
         <button
           onClick={handleSetMax}
-          disabled={quantity === maxValue || disabled}
+          disabled={quantity === maxValue}
           className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200 disabled:opacity-60'>
           Max
         </button>
         <button
           onClick={handleClear}
-          disabled={quantity === minValue || disabled}
+          disabled={quantity === minValue}
           className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200 disabled:opacity-60'>
           Min
         </button>

@@ -28,7 +28,7 @@ export function Redeem() {
         address: getChainById(chain?.id).bridgeAddress,
         abi: BridgeAbi,
         functionName: 'redeem',
-        args: [address, address, parseEther(v.amount), BigInt(v.hash), getChainById(chain?.id).name],
+        args: [address, address, parseEther(v.amount), BigInt(v.hash), getChainById(chain?.id).swapTokens[0]],
       })
     } else {
       Add(`Unknown chain ID or an address`, {

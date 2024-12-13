@@ -9,7 +9,7 @@ function classNames(...classes: string[]) {
 }
 
 export const Tabs = () => {
-  const categories = ['Bridge', 'Facet', 'Redeem']
+  const categories = ['Bridge', 'Redeem', 'Facet']
   return (
     <div className='mt-16 w-full max-w-xl py-4 sm:px-0'>
       <Tab.Group>

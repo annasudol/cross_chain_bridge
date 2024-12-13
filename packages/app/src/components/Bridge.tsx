@@ -12,6 +12,7 @@ import { ButtonSubmit } from '@/components/ui/ButtonSubmit'
 import { useChainModal } from '@rainbow-me/rainbowkit'
 import { useBalance } from '@/app/hooks/useBalance'
 import BridgeAbi from '@/abi/BridgeAbi.json'
+
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
   const [swapTxIsSuccess, setSwapTxIsSuccess] = useState(false)
@@ -29,6 +30,7 @@ export function Bridge() {
     error: txError,
     isSuccess: txSuccess,
   } = useWaitForTransactionReceipt({ hash })
+
   const { setValue } = useLocalStorage(`redeem-${getChainById(chain?.id).swapTokens[0]}`)
   const handleClick = () => {
     openChainModal && openChainModal()
@@ -40,7 +42,7 @@ export function Bridge() {
         address: getChainById(chain?.id).bridgeAddress,
         abi: BridgeAbi,
         functionName: 'swap',
-        args: [address, parseEther(amount), getChainById(chain?.id).name],
+        args: [address, parseEther(amount), getChainById(chain?.id).swapTokens[0]],
       })
     } else {
       Add(`Unknown chain ID or an address`, {
@@ -96,7 +98,7 @@ export function Bridge() {
                 onChange={setAmount}
                 quantity={amount}
                 maxValue={formattedBalance}
-                disabled={isPending || isLoading || formattedBalance === '0.00'}
+                disabled={isPending || isLoading}
               />
             </div>
             <ButtonSubmit

@@ -4,6 +4,7 @@ import { SITE_INFO, SITE_NAME, SITE_URL } from './site'
 import { ETH_CHAINS } from './network'
 import { bscTestnet, sepolia } from 'viem/chains'
 import { http, createConfig } from '@wagmi/core'
+import { injected, metaMask, safe, walletConnect } from 'wagmi/connectors'
 
 export const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
 if (!WALLETCONNECT_PROJECT_ID) {
@@ -21,7 +22,6 @@ export const WALLET_CONNECT_CONFIG = defaultWagmiConfig({
     icons: [],
   },
   auth: {
-    email: true,
     socials: undefined,
     showWallets: true,
     walletFeatures: true,
@@ -30,10 +30,11 @@ export const WALLET_CONNECT_CONFIG = defaultWagmiConfig({
     storage: cookieStorage,
   }),
 })
+
 export const config = createConfig({
   chains: [bscTestnet, sepolia],
   transports: {
-    [sepolia.id]: http(),
+    [sepolia.id]: http('https://sepolia.gateway.tenderly.co/3CdlGgm3VNUfE7muUHSQ7J'),
     [bscTestnet.id]: http(),
   },
 })
