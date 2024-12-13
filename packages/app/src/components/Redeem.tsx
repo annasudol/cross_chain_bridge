@@ -4,7 +4,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagm
 import { useEffect, useMemo, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 
-import { chains } from '@/chains'
+import { getChainById } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
 import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
@@ -17,7 +17,7 @@ export function Redeem() {
   const { address, chain } = useAccount()
   const { data: hash, error, writeContract } = useWriteContract()
   const { isLoading, error: txError, isSuccess: txSuccess } = useWaitForTransactionReceipt({ hash })
-  const { state, setValue } = useLocalStorage(`redeem-${chains[chain?.id || 97].name}`)
+  const { state, setValue } = useLocalStorage(`redeem-${getChainById(chain?.id).name}`)
   const [txRedeemed, setTxRedeemed] = useState<IStorage>()
 
   async function handleSendTransaction(v: IStorage) {

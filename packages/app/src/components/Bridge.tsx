@@ -86,7 +86,7 @@ export function Bridge() {
         </div>
         {swapTxIsSuccess ? (
           <ButtonSubmit onClick={handleClick}>
-            click to change network to {chains[chain?.id || 97].swapTokensChains[0]}
+            click to change network to {getChainById(chain?.id).swapTokensChains[0]}
           </ButtonSubmit>
         ) : (
           <div className='m-2'>
