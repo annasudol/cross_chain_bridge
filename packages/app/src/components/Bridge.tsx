@@ -5,13 +5,13 @@ import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
 import { getChainById } from '@/chains'
-import { parseAbi, parseEther } from 'viem'
+import { parseEther } from 'viem'
 import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ui/ButtonSubmit'
 import { useChainModal } from '@rainbow-me/rainbowkit'
 import { useBalance } from '@/app/hooks/useBalance'
-
+import BridgeAbi from '@/abi/BridgeAbi.json'
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
   const [swapTxIsSuccess, setSwapTxIsSuccess] = useState(false)
@@ -38,7 +38,7 @@ export function Bridge() {
     if (chain && chain?.id && address) {
       writeContract({
         address: getChainById(chain?.id).bridgeAddress,
-        abi: parseAbi(['function swap(address to, uint256 amount, string memory symbol)']),
+        abi: BridgeAbi,
         functionName: 'swap',
         args: [address, parseEther(amount), getChainById(chain?.id).name],
       })
@@ -58,13 +58,13 @@ export function Bridge() {
       })
       if (!isLoading && !isPending && !isPendingSwap) setSwapTxIsSuccess(true)
     } else if (txError) {
-      const message = (txError?.cause as any).message.split('')[0]
-      Add(`Transaction failed: ${message || 'unknown reqason'}`, {
+      console.warn('error', txError)
+      Add('Transaction failed', {
         type: 'error',
       })
     } else if (error) {
-      const message = (error as any).message.split('  ')[0]
-      Add(`Transaction failed: ${message || 'unknown reqason'}`, {
+      console.warn('error', error)
+      Add('Transaction failed', {
         type: 'error',
       })
     }
@@ -96,7 +96,7 @@ export function Bridge() {
                 onChange={setAmount}
                 quantity={amount}
                 maxValue={formattedBalance}
-                disabled={isPending || isLoading || isPendingSwap || formattedBalance === '0.00'}
+                disabled={isPending || isLoading || formattedBalance === '0.00'}
               />
             </div>
             <ButtonSubmit

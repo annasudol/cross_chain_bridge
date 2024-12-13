@@ -5,12 +5,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNotifications } from '@/context/Notifications'
 
 import { getChainById } from '@/chains'
-import { parseAbi, parseEther } from 'viem'
+import { parseEther } from 'viem'
 import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ui/ButtonSubmit'
 import { IStorage } from '@/utils/types'
 import { Loading } from './ui/Loading'
+import BridgeAbi from '@/abi/BridgeAbi.json'
 
 export function Redeem() {
   const { Add } = useNotifications()
@@ -25,9 +26,7 @@ export function Redeem() {
       setTxRedeemed({ amount: v.amount, address: v.address, hash: v.hash })
       writeContract({
         address: getChainById(chain?.id).bridgeAddress,
-        abi: parseAbi([
-          'function redeem(address from, address to, uint256 amount, uint256 tx_hash, string memory symbol)',
-        ]),
+        abi: BridgeAbi,
         functionName: 'redeem',
         args: [address, address, parseEther(v.amount), BigInt(v.hash), getChainById(chain?.id).name],
       })

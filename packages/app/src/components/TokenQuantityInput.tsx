@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 interface TokenQuantityInputProps {
   id: string,
@@ -21,6 +21,7 @@ export function TokenQuantityInput({
   disabled = false,
   minValue = '0.01',
 }: TokenQuantityInputProps) {
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // only allow numbers and one decimal point
     if (!/^\d*\.?\d*$/.test(e.target.value)) {
@@ -38,7 +39,11 @@ export function TokenQuantityInput({
   }
 
   useEffect(() => {
-    Number(maxValue) < Number(quantity) && onChange(maxValue as string)
+    if (!disabled) {
+      Number(maxValue) < Number(quantity) && onChange(maxValue as string)
+      Number(minValue) > Number(quantity) && onChange(minValue as string)
+    }
+    
   }, [quantity])
 
   return (
@@ -66,7 +71,7 @@ export function TokenQuantityInput({
           onClick={handleClear}
           disabled={quantity === minValue || disabled}
           className='btn btn-xs btn-outline btn-neutral text-white hover:text-gray-200 transition-colors disabled:text-gray-200 disabled:opacity-60'>
-          Clear
+          Min
         </button>
       </div>
     </div>
