@@ -24,12 +24,12 @@ export function Redeem() {
     if (address && chain?.id) {
       setTxRedeemed({ amount: v.amount, address: v.address, hash: v.hash })
       writeContract({
-        address: chains[chain?.id].bridgeAddress,
+        address: getChainById(chain?.id).bridgeAddress,
         abi: parseAbi([
           'function redeem(address from, address to, uint256 amount, uint256 tx_hash, string memory symbol)',
         ]),
         functionName: 'redeem',
-        args: [address, address, parseEther(v.amount), BigInt(v.hash), chains[chain?.id].name],
+        args: [address, address, parseEther(v.amount), BigInt(v.hash), getChainById(chain?.id).name],
       })
     } else {
       Add(`Unknown chain ID or an address`, {
@@ -69,7 +69,7 @@ export function Redeem() {
       redeemState &&
       redeemState.map((v: any) => (
         <ButtonSubmit key={v.hash} onClick={() => handleSendTransaction(v)}>
-          Redeem {v.amount} {chains[chain?.id as number]?.name}
+          Redeem {v.amount} {getChainById(chain?.id)?.name}
         </ButtonSubmit>
       ))
     )

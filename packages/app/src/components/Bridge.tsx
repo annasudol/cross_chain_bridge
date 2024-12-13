@@ -6,14 +6,13 @@ import { useNotifications } from '@/context/Notifications'
 import { TokenQuantityInput } from '@/components/TokenQuantityInput'
 import { TokenName } from '@/components/TokenName'
 import { SwitchNetworkBtn } from '@/components/SwitchNetworkBtn'
-import { chains } from '@/chains'
+import { getChainById } from '@/chains'
 import { parseAbi, parseEther } from 'viem'
 import { ConnectWallet } from '@/components/ConnectWallet'
 import useLocalStorage from '@/app/hooks/useLocalStorage'
 import { ButtonSubmit } from '@/components/ui/ButtonSubmit'
 import { useChainModal } from '@rainbow-me/rainbowkit'
 import { useBalance } from '@/app/hooks/useBalance'
-import { truncateString } from '@/utils/helpers/formatTools'
 export function Bridge() {
   const [amount, setAmount] = useState('0.01')
   const [swapTxIsSuccess, setSwapTxIsSuccess] = useState(false)
@@ -22,7 +21,7 @@ export function Bridge() {
 
   const { Add } = useNotifications()
   const { address, chain } = useAccount()
-  const { formattedBalance } = useBalance({ address, tokenAddress: chains[chain?.id as number].tokenAddress })
+  const { formattedBalance } = useBalance({ address, tokenAddress: getChainById(chain?.id).tokenAddress })
 
   const { data: hash, error, isPending, writeContract } = useWriteContract()
   const {
@@ -31,7 +30,7 @@ export function Bridge() {
     error: txError,
     isSuccess: txSuccess,
   } = useWaitForTransactionReceipt({ hash })
-  const { setValue } = useLocalStorage(`redeem-${chains[chain?.id as number].swapTokens[0]}`)
+  const { setValue } = useLocalStorage(`redeem-${getChainById(chain?.id).swapTokens[0]}`)
   const handleClick = () => {
     openChainModal && openChainModal()
     setSwapTxIsSuccess(false)
@@ -39,10 +38,10 @@ export function Bridge() {
   async function handleSendTransaction() {
     if (chain && chain?.id && address) {
       writeContract({
-        address: chains[chain?.id].bridgeAddress,
+        address: getChainById(chain?.id).bridgeAddress,
         abi: parseAbi(['function swap(address to, uint256 amount, string memory symbol)']),
         functionName: 'swap',
-        args: [address, parseEther(amount), chains[chain?.id].name],
+        args: [address, parseEther(amount), getChainById(chain?.id).name],
       })
     } else {
       Add(`Unknown chain ID or an address`, {
@@ -81,7 +80,7 @@ export function Bridge() {
           {address && chain?.id && (
             <>
               Your balance: {formattedBalance}
-              <span className='text-white mx-2'>{chains[chain?.id as number]?.name}</span>
+              <span className='text-white mx-2'>{getChainById(chain?.id)?.name}</span>
             </>
           )}
         </div>
@@ -106,8 +105,8 @@ export function Bridge() {
               isLoading={isPending || isLoading}>
               {formattedBalance && Number(formattedBalance) < 0.01
                 ? 'Insufficient balance'
-                : `Swap ${amount} ${chains[chain?.id as number]?.name} to
-              ${chains[chain?.id as number]?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
+                : `Swap ${amount} ${getChainById(chain?.id)?.name} to
+              ${getChainById(chain?.id)?.name === 'sETH' ? 'sBCS' : 'sETH'}`}
             </ButtonSubmit>
           </div>
         )}

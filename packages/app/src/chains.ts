@@ -1,3 +1,4 @@
+import { get } from 'http'
 import { Address } from 'viem'
 export const TOKEN_tBSC_ADDRESS = '0xf097BC82bbAF699fb99796aabeB0e1649F279715'
 export const BRIDGE_BSC_Address = '0x67408729BFD8192673ADc073D4Ca33A56c55811d'
@@ -36,3 +37,5 @@ export const chains: { [id: number]: IChain } = {
     swapTokensChains: ['sepolia'],
   },
 }
+
+export const getChainById = (id?: number) => chains[id ||11155111];
